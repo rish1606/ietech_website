@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 470 150" fill="none">
+  <!-- Left Box -->
+  <rect x="0" y="0" width="150" height="150" fill="black"/>
+  <!-- "i.e." text inside the box -->
+  <text x="75" y="103" font-family="'Montserrat', sans-serif" font-weight="700" font-size="88" letter-spacing="-1" fill="white" text-anchor="middle">i.e.</text>
+  
+  <!-- "TECH" text on the right -->
+  <text x="173" y="104" font-family="'Montserrat', sans-serif" font-weight="700" font-size="90" letter-spacing="-1.5" fill="#103651" text-anchor="start">TECH</text>
+</svg>

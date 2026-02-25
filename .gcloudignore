@@ -1,0 +1,9 @@
+# Keep Cloud Build uploads minimal
+.git
+.gitignore
+.gcloudignore
+node_modules
+dist
+*.log
+.vscode
+.DS_Store

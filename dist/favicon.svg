@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150" fill="none">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&amp;display=swap');
+      .box { fill: #000; }
+      .text { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 90px; fill: #fff; }
+      @media (prefers-color-scheme: dark) {
+        .box { fill: #fff; }
+        .text { fill: #000; }
+      }
+    </style>
+  </defs>
+  <rect x="0" y="0" width="150" height="150" class="box"/>
+  <text x="75" y="105" text-anchor="middle" class="text">i.e.</text>
+</svg>
