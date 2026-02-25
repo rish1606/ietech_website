@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { X, Mail, Phone, Loader2, CheckCircle, ArrowRight } from 'lucide-react';
+import { X, Mail, Phone, Loader2, CheckCircle, ArrowRight, ShieldCheck } from 'lucide-react';
 
 interface ContactModalProps {
     isOpen: boolean;
@@ -14,6 +14,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
     const [isGoogleLoading, setIsGoogleLoading] = useState(false);
     const [error, setError] = useState('');
     const [submitted, setSubmitted] = useState(false);
+    const [googleAuthed, setGoogleAuthed] = useState(false);
     const hasFirebaseConfig = Boolean(
         import.meta.env.VITE_FIREBASE_API_KEY &&
         import.meta.env.VITE_FIREBASE_AUTH_DOMAIN &&
@@ -28,6 +29,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
         setSubmitted(false);
         setIsLoading(false);
         setIsGoogleLoading(false);
+        setGoogleAuthed(false);
         onClose();
     };
 
@@ -42,8 +44,16 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
 
         setIsLoading(true);
         try {
-            // TODO: Wire up to Firebase / backend
-            await new Promise((resolve) => setTimeout(resolve, 1200));
+            const [{ collection, addDoc, serverTimestamp }, { db }] = await Promise.all([
+                import('firebase/firestore'),
+                import('../firebase/config'),
+            ]);
+            await addDoc(collection(db, 'contacts'), {
+                email,
+                phone: phone || null,
+                source: googleAuthed ? 'google' : 'manual',
+                createdAt: serverTimestamp(),
+            });
             setSubmitted(true);
         } catch {
             setError('Something went wrong. Please try again.');
@@ -70,7 +80,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
             const result = await signInWithPopup(auth, provider);
             if (result.user.email) setEmail(result.user.email);
             if (result.user.phoneNumber) setPhone(result.user.phoneNumber);
-            setSubmitted(true);
+            setGoogleAuthed(true);
         } catch (err) {
             const code = typeof err === 'object' && err !== null && 'code' in err
                 ? String((err as { code?: string }).code ?? '')
@@ -202,9 +212,14 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                                         <div>
                                             <label
                                                 htmlFor="contact-email"
-                                                className="mb-1.5 block text-xs font-semibold text-neutral-600 dark:text-neutral-400"
+                                                className="mb-1.5 flex items-center gap-2 text-xs font-semibold text-neutral-600 dark:text-neutral-400"
                                             >
                                                 Email address <span className="text-red-400">*</span>
+                                                {googleAuthed && (
+                                                    <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-medium text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400">
+                                                        <ShieldCheck className="h-3 w-3" /> Verified via Google
+                                                    </span>
+                                                )}
                                             </label>
                                             <div className="relative">
                                                 <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400 dark:text-neutral-500" />
