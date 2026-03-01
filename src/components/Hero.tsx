@@ -3,7 +3,7 @@ import { ArrowRight } from 'lucide-react';
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-20 transition-colors duration-300">
+    <section id="home" className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-20 transition-colors duration-300">
 
       {/* Background subtle effect */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.05)_0%,transparent_100%)] dark:bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_0%,transparent_100%)] pointer-events-none" />
@@ -27,8 +27,8 @@ export default function Hero() {
           transition={{ duration: 1, delay: 0.3 }}
           className="mt-8 text-lg md:text-xl text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto leading-relaxed transition-colors"
         >
-          A single intelligent platform for manufacturers and engineering firms, combining ERP, custom software,
-          and AI-assisted CAD to streamline every process from finance to product delivery.
+          An engineering-first team for manufacturers and engineering firms, building ERP, custom software,
+          and AI-assisted CAD systems that fit real operations from finance to product delivery.
         </motion.p>
 
         <motion.div
@@ -47,17 +47,6 @@ export default function Hero() {
               <span className="relative">Show Me The Workflow</span>
               <ArrowRight className="relative h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
             </a>
-          </div>
-
-          <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-            {['2-minute tour', 'No sign-up', 'ERP + Engineering + CAD'].map((item) => (
-              <span
-                key={item}
-                className="rounded-full border border-black/10 dark:border-white/15 px-3 py-1 text-xs font-medium text-neutral-600 dark:text-neutral-400"
-              >
-                {item}
-              </span>
-            ))}
           </div>
         </motion.div>
       </div>

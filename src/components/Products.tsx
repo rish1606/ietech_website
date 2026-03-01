@@ -110,6 +110,9 @@ const ACCOUNTING_APPS: Array<{ label: string; icon: LucideIcon }> = [
   { label: 'Subscription', icon: Package },
 ];
 
+const getShowcaseHeaderIcon = (label: string): LucideIcon =>
+  label.toLowerCase() === 'product' ? Package : Settings;
+
 
 
 function useDesktopMode(minWidth = DESKTOP_BREAKPOINT_PX) {
@@ -306,7 +309,7 @@ function ErpAccountsScene() {
           ].map((label) => (
             <div key={label} className="rounded border border-[#dce2ec] bg-white px-2 py-1.5 dark:border-[#21262d] dark:bg-[#161b22]">
               <p className="text-[8px] text-[#77849a] dark:text-[#8b949e]">{label}</p>
-              <p className="mt-0.5 text-[11px] font-semibold text-[#2e3645] dark:text-[#e6edf3]">₹ 0.00</p>
+              <p className="mt-0.5 text-[11px] font-semibold text-[#2e3645] dark:text-[#e6edf3]">₹ 890724.57</p>
             </div>
           ))}
         </div>
@@ -316,15 +319,15 @@ function ErpAccountsScene() {
           <div className="mt-1 grid grid-cols-3 text-center text-[8px] text-[#7d889b] dark:text-[#8b949e]">
             <div>
               <p>Total Income</p>
-              <p className="text-[12px] font-semibold text-[#2f3747] dark:text-[#e6edf3]">₹ 9,99,55,748.50</p>
+              <p className="text-[12px] font-semibold text-[#2f3747] dark:text-[#e6edf3]">₹ 11,99,55,748.50</p>
             </div>
             <div>
               <p>Total Expense</p>
-              <p className="text-[12px] font-semibold text-[#2f3747] dark:text-[#e6edf3]">₹ 8,27,93,271.04</p>
+              <p className="text-[12px] font-semibold text-[#2f3747] dark:text-[#e6edf3]">₹ 9,27,93,271.04</p>
             </div>
             <div>
               <p>Net Profit</p>
-              <p className="text-[12px] font-semibold text-[#16a163]">₹ 1,71,62,477.46</p>
+              <p className="text-[12px] font-semibold text-[#16a163]">₹ 2,71,62,477.46</p>
             </div>
           </div>
 
@@ -822,7 +825,7 @@ function ErpAppSwitcherScene() {
   );
 }
 
-function ErpReplicaPreview() {
+export function ErpReplicaPreview() {
   const [activeSceneIndex, setActiveSceneIndex] = useState(0);
   const [cursorIndex, setCursorIndex] = useState(0);
 
@@ -924,7 +927,7 @@ const CAD_CURSOR_PATHS: Record<string, { x: number; y: number; click?: boolean }
 const CAD_AUTOPLAY_MS = 6000;
 
 /** Onshape-like workspace scene */
-function CadWorkspaceScene() {
+export function CadWorkspaceScene() {
   const promptText = 'Generate a mounting bracket with 4 bolt holes, 3mm fillet edges, compatible with ISO 4762 M6 bolts...';
   const [typedChars, setTypedChars] = useState(0);
 
@@ -1335,6 +1338,9 @@ function SlideContent({
   total: number;
   onContactOpen: () => void;
 }) {
+  const HeaderIcon = getShowcaseHeaderIcon(tab.label);
+  const stepNumber = String(index + 1).padStart(2, '0');
+
   /* ─── Showcase section (top) ─── */
   const showcase = (() => {
     if (tab.key === 'custom') {
@@ -1358,16 +1364,23 @@ function SlideContent({
 
       {/* Text content — sits below the preview, never overlaps */}
       <div className="relative z-10 border-t border-black/5 bg-white px-5 py-4 dark:border-white/5 dark:bg-neutral-950 sm:px-7 sm:py-5 xl:px-9 xl:py-6">
-        <div className="flex items-center gap-3">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#103651] dark:text-[#8FC6F2] sm:text-xs">
-            {tab.label}
-          </p>
-          <span className="text-[10px] text-neutral-400 dark:text-neutral-600 sm:text-xs">
-            {index + 1} / {total}
+        <div className="mb-3 flex items-center gap-3 sm:mb-3.5">
+          <span className="select-none font-mono text-2xl font-bold text-black/15 dark:text-white/24">
+            {stepNumber}
           </span>
+          <div className="h-px flex-1 bg-black/10 dark:bg-white/14" />
+          <div className="inline-flex items-center gap-1.5 rounded-lg bg-[#103651]/10 px-2.5 py-1.5 dark:bg-[#8FC6F2]/10">
+            <HeaderIcon className="h-3.5 w-3.5 text-[#103651] dark:text-[#8FC6F2]" />
+            <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#103651] dark:text-[#8FC6F2]">
+              {tab.label}
+            </span>
+            <span className="text-[10px] text-neutral-500 dark:text-neutral-400">
+              {index + 1}/{total}
+            </span>
+          </div>
         </div>
 
-        <h3 className="mt-1.5 text-lg font-bold tracking-tight text-black dark:text-white sm:mt-2 sm:text-xl xl:text-2xl">
+        <h3 className="text-lg font-bold tracking-tight text-black dark:text-white sm:text-xl xl:text-2xl">
           {tab.title}
         </h3>
 

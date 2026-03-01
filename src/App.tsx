@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import About from './components/About';
 import Products from './components/Products';
 import Footer from './components/Footer';
 import ContactModal from './components/ContactModal';
@@ -15,6 +16,7 @@ export default function App() {
       <Navbar onContactOpen={openContact} />
       <main>
         <Hero />
+        <About />
         <Products onContactOpen={openContact} />
         <Footer onContactOpen={openContact} />
       </main>

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script>
+  window.onload = function() {
+    var target = parseInt(new URLSearchParams(window.location.search).get('y') || '0');
+    window.scrollTo(0, target);
+  };
+</script>
+</head>
+<body style="margin:0;padding:0">
+<script>window.location.replace('/?scrollto=' + new URLSearchParams(window.location.search).get('y'))</script>
+</body>
+</html>
