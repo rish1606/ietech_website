@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
-import { Cpu, Wrench, Target, Lightbulb, Layers } from 'lucide-react';
+import { Cpu, Wrench } from 'lucide-react';
 import { ErpReplicaPreview, CadWorkspaceScene } from './Products';
 
 /* ─── Animation helpers ─────────────────────────────────────── */
@@ -8,7 +8,7 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 const fadeUp = (delay = 0) => ({
     initial: { opacity: 0, y: 24 },
     whileInView: { opacity: 1, y: 0 },
-    viewport: { once: true, margin: '-60px' },
+    viewport: { once: false, margin: '-60px' },
     transition: { duration: 0.65, ease: EASE, delay },
 });
 
@@ -114,7 +114,7 @@ function CodePane({ productKey }: { productKey: ProductKey }) {
                 </AnimatePresence>
                 {/* Blinking cursor */}
                 <motion.span
-                    className="inline-block h-[10px] w-[5px] bg-[#8FC6F2] rounded-sm ml-0.5 align-middle"
+                    className="inline-block h-[10px] w-[5px] bg-[#3F618C] rounded-sm ml-0.5 align-middle"
                     animate={{ opacity: [1, 0] }}
                     transition={{ duration: 0.55, repeat: Infinity, repeatType: 'reverse' }}
                 />
@@ -192,7 +192,7 @@ function SoftwareJourneyVisual() {
 
     return (
         <div
-            className="relative mx-4 mb-4 aspect-[2/1] rounded-xl overflow-hidden border border-white/5"
+            className="w-full h-full overflow-hidden absolute inset-0"
             style={{ background: '#0d1117' }}
         >
             <div className="grid h-full" style={{ gridTemplateColumns: '46% 54%' }}>
@@ -232,7 +232,7 @@ const TR = { duration: CYCLE, repeat: Infinity, ease: 'linear' as const }; // LI
 function ConveyorVisual() {
     return (
         <div
-            className="mx-4 mb-4 rounded-xl overflow-hidden relative border border-white/5"
+            className="w-full h-full overflow-hidden absolute inset-0 flex items-center justify-center"
             style={{ background: 'linear-gradient(to bottom, #05080c, #0d141e)' }}
         >
             <svg viewBox="0 0 380 190" className="w-full" aria-hidden style={{ display: 'block' }}>
@@ -279,8 +279,8 @@ function ConveyorVisual() {
                     </linearGradient>
 
                     <radialGradient id="bin-glow">
-                        <stop offset="0%" stopColor="#8FC6F2" stopOpacity="0.15" />
-                        <stop offset="100%" stopColor="#8FC6F2" stopOpacity="0" />
+                        <stop offset="0%" stopColor="#3F618C" stopOpacity="0.15" />
+                        <stop offset="100%" stopColor="#3F618C" stopOpacity="0" />
                     </radialGradient>
                 </defs>
 
@@ -315,7 +315,7 @@ function ConveyorVisual() {
                     {/* Side Rail (Thick anodized black aluminum) */}
                     <rect x="64" y="150" width="252" height="6" rx="1" fill="#111822" stroke="#253545" strokeWidth="0.8" />
                     {/* Blue LED Strip on rail */}
-                    <rect x="68" y="152" width="244" height="1" fill="#8FC6F2" opacity="0.8" filter="url(#spark-f)" />
+                    <rect x="68" y="152" width="244" height="1" fill="#3F618C" opacity="0.8" filter="url(#spark-f)" />
 
                     {/* Belt Core */}
                     <rect x="70" y="137" width="240" height="18" rx="2" fill="url(#belt-surface)" stroke="#06080b" strokeWidth="1.5" />
@@ -348,11 +348,11 @@ function ConveyorVisual() {
 
                     {/* Pre-existing parts in bin (Bin fills up) */}
                     <rect x="328" y="178" width="22" height="7" rx="1.5" fill="url(#metal-joint)" stroke="#1a2128" strokeWidth="0.5" />
-                    <rect x="334" y="174" width="10" height="4" rx="1" fill="#8FC6F2" />
+                    <rect x="334" y="174" width="10" height="4" rx="1" fill="#3F618C" />
                     <circle cx="339" cy="176" r="1.2" fill="#22c55e" />
 
                     <rect x="328" y="170" width="22" height="7" rx="1.5" fill="url(#metal-joint)" stroke="#1a2128" strokeWidth="0.5" />
-                    <rect x="334" y="166" width="10" height="4" rx="1" fill="#8FC6F2" />
+                    <rect x="334" y="166" width="10" height="4" rx="1" fill="#3F618C" />
                     <circle cx="339" cy="168" r="1.2" fill="#22c55e" />
 
                     {/* Front lip of the bin */}
@@ -376,7 +376,7 @@ function ConveyorVisual() {
                     <rect x="-11" y="-7" width="22" height="7" rx="1.5" filter="url(#part-shadow)"
                         fill="url(#metal-joint)" stroke="#1a2128" strokeWidth="0.5"
                     />
-                    <rect x="-5" y="-11" width="10" height="4" rx="1" fill="#8FC6F2" />
+                    <rect x="-5" y="-11" width="10" height="4" rx="1" fill="#3F618C" />
                     <circle cx="0" cy="-9" r="1.2" fill="#22c55e" filter="url(#spark-f)" />
                 </motion.g>
 
@@ -421,7 +421,7 @@ function ConveyorVisual() {
                             <rect x="-11" y="-7" width="22" height="7" rx="1.5"
                                 fill="url(#metal-joint)" stroke="#1a2128" strokeWidth="0.5" filter="url(#part-shadow)" />
                             {/* Blue cap is "assembled" mid-air or just visually present */}
-                            <rect x="-5" y="-11" width="10" height="4" rx="1" fill="#8FC6F2" />
+                            <rect x="-5" y="-11" width="10" height="4" rx="1" fill="#3F618C" />
                             <circle cx="0" cy="-9" r="1.2" fill="#22c55e" filter="url(#spark-f)" />
                         </motion.g>
 
@@ -469,7 +469,7 @@ function ConveyorVisual() {
                         >
                             <rect x="-11" y="-7" width="22" height="7" rx="1.5"
                                 fill="url(#metal-joint)" stroke="#1a2128" strokeWidth="0.5" filter="url(#part-shadow)" />
-                            <rect x="-5" y="-11" width="10" height="4" rx="1" fill="#8FC6F2" />
+                            <rect x="-5" y="-11" width="10" height="4" rx="1" fill="#3F618C" />
                             <circle cx="0" cy="-9" r="1.2" fill="#22c55e" filter="url(#spark-f)" />
                         </motion.g>
 
@@ -496,7 +496,13 @@ const disciplines = [
         tagline: 'Systems that think.',
         description: (
             <>
-                Full-stack product development, cloud infrastructure, AI integration, and industrial automation software — built and shipped inside demanding engineering organisations, including open-source work at{' '}
+                Full-stack product development, cloud infrastructure, AI integration, and industrial automation software — built and shipped inside demanding engineering organisations, including SDE2 engineer at{' '}
+                <img
+                    src="/logos/google.svg"
+                    alt="Google"
+                    className="inline-block h-[14px] mx-[2px] mb-[2px]"
+                />{' '}
+                and open-source work at{' '}
                 <img
                     src="/logos/mozilla-lockup.svg"
                     alt="Mozilla"
@@ -533,28 +539,19 @@ const disciplines = [
     },
 ];
 
-const pillars = [
-    {
-        number: '01',
-        icon: Target,
-        title: 'Problem First',
-        body: 'We start with your constraint, not our product catalogue. The solution is shaped by your workflow, your team, and your actual bottleneck.',
-    },
-    {
-        number: '02',
-        icon: Lightbulb,
-        title: 'Frugal & Effective',
-        body: 'Elegant engineering means no wasted complexity. The simplest system that actually solves the problem — not the most impressive one on paper.',
-    },
-    {
-        number: '03',
-        icon: Layers,
-        title: 'Industry 4.0 Ready',
-        body: 'Every engagement moves an operation closer to real-time data, automation, and connected intelligence — regardless of their starting point.',
-    },
-];
-
 const credStats = [
+    {
+        id: 'Google',
+        value: (
+            <img
+                src="/logos/google.svg"
+                alt="Google"
+                className="h-[26px] w-auto object-contain"
+            />
+        ),
+        label: 'SDE2 engineer',
+        accent: true
+    },
     {
         id: 'Mozilla',
         value: (
@@ -618,118 +615,110 @@ export default function About() {
         <section
             id="about"
             aria-label="About i.e tech"
-            className="relative py-24 md:py-32 bg-white dark:bg-black transition-colors duration-300"
+            className="relative pt-24 pb-12 md:pt-32 md:pb-16 bg-transparent transition-colors duration-300"
         >
             <div className="container mx-auto max-w-7xl px-4">
 
-                {/* ── Header ── */}
-                <motion.div {...fadeUp(0)} className="max-w-3xl mb-16 md:mb-20">
-                    <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-[#103651] dark:text-[#8FC6F2]">
-                        Who We Are
-                    </p>
-                    <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold tracking-tighter text-black dark:text-white leading-[1.08]">
-                        Two engineers.
-                        <span className="block text-neutral-400 dark:text-neutral-600">One obsession.</span>
+                {/* ── Intro Text ── */}
+                <motion.div {...fadeUp(0)} className="mb-14 md:mb-20 max-w-3xl mx-auto flex flex-col items-center text-center">
+                    <div className="flex items-center justify-center gap-4 mb-4 md:mb-6">
+                        <div className="h-[1px] w-12 md:w-20 bg-neutral-300 dark:bg-neutral-800" />
+                        <span className="text-[10px] md:text-xs font-bold uppercase tracking-[0.25em] text-[#274060] dark:text-[#3F618C]">
+                            Who we are
+                        </span>
+                        <div className="h-[1px] w-12 md:w-20 bg-neutral-300 dark:bg-neutral-800" />
+                    </div>
+                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-black dark:text-white leading-[1.1] mb-6 md:mb-8">
+                        Two engineers.<br />
+                        <span className="text-neutral-400 dark:text-neutral-500">One obsession.</span>
                     </h2>
-                    <p className="mt-6 text-lg text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-2xl">
-                        A software engineer and a mechanical engineer — both shaped by demanding corporate environments — who decided
-                        the industrial tools that manufacturers actually need don&apos;t exist yet. So we&apos;re building them.
-                        We work directly with manufacturers and engineering firms to design, deploy, and hand over solutions that
-                        fit how their operation actually runs.
+                    <p className="text-base md:text-lg lg:text-xl leading-relaxed text-neutral-600 dark:text-neutral-400 mb-8 max-w-2xl">
+                        A software engineer and a mechanical engineer — both shaped by
+                        demanding corporate environments — who decided the industrial tools
+                        that manufacturers actually need don't exist yet. So we're building them.
+                        We work directly with manufacturers and engineering firms to design,
+                        deploy, and hand over solutions that fit how their operation actually runs.
                     </p>
                 </motion.div>
 
                 {/* ── Discipline Cards ── */}
-                <div className="grid gap-5 md:grid-cols-2 mb-14 md:mb-16">
+                <div className="flex flex-col gap-16 md:gap-20 mb-14 md:mb-16">
                     {disciplines.map((disc, i) => {
                         const Icon = disc.icon;
                         const Visual = disc.Visual;
+                        const isEven = i % 2 === 0;
                         return (
-                            <motion.div
-                                key={disc.domain}
-                                {...fadeUp(i * 0.1)}
-                                className="rounded-2xl border border-black/[0.07] bg-neutral-50 dark:border-white/[0.07] dark:bg-white/[0.03] overflow-hidden"
-                            >
-                                <div className="p-7">
-                                    <div className="flex items-center gap-3 mb-5">
-                                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#103651]/10 dark:bg-[#8FC6F2]/10">
-                                            <Icon className="h-[18px] w-[18px] text-[#103651] dark:text-[#8FC6F2]" />
+                            <div key={disc.domain} className="flex flex-col">
+                                {/* Heading and Subheading on top - Alternating Left/Right aligned */}
+                                <motion.div {...fadeUp(i * 0.1)} className={`mb-8 md:mb-10 flex flex-col ${isEven ? 'items-start text-left' : 'items-end text-right'} pb-6 relative`}>
+                                    <div className={`flex items-center gap-3 mb-3 ${isEven ? '' : 'flex-row-reverse'}`}>
+                                        <div className="flex h-8 w-8 shrink-0 items-center justify-center bg-[#274060]/10 dark:bg-[#3F618C]/10 rounded-none">
+                                            <Icon className="h-4 w-4 text-[#274060] dark:text-[#3F618C]" />
                                         </div>
-                                        <div>
-                                            <p className="text-[11px] font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500">
-                                                {disc.domain}
-                                            </p>
-                                            <p className="text-base font-bold text-black dark:text-white leading-tight">
-                                                {disc.tagline}
-                                            </p>
-                                        </div>
+                                        <h3 className="text-xl md:text-2xl font-bold tracking-tight text-black dark:text-white uppercase">
+                                            {disc.domain}
+                                        </h3>
                                     </div>
-                                    <p className="text-[14px] leading-relaxed text-neutral-500 dark:text-neutral-400 mb-5">
-                                        {disc.description}
+                                    <p className={`${isEven ? 'ml-11' : 'mr-11'} text-base md:text-lg font-medium text-neutral-500 dark:text-neutral-400 tracking-wide md:tracking-widest`}>
+                                        {disc.tagline}
                                     </p>
-                                    <div className="flex flex-wrap gap-2">
-                                        {disc.tags.map((tag) => (
-                                            <span
-                                                key={tag}
-                                                className="rounded-full border border-black/[0.07] bg-white px-3 py-1 text-xs font-medium text-neutral-500 dark:border-white/[0.07] dark:bg-white/[0.04] dark:text-neutral-400"
-                                            >
-                                                {tag}
-                                            </span>
-                                        ))}
+                                    
+
+                                </motion.div>
+                                
+                                {/* Animation and Text Layout */}
+                                <motion.div
+                                    {...fadeUp(i * 0.1 + 0.1)}
+                                    className={`flex flex-col ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'} items-stretch gap-8 md:gap-12`}
+                                >
+                                    {/* Screen side - Sharp edges, no frame */}
+                                    <div className="w-full md:w-1/2 relative min-h-[250px] md:min-h-[320px] rounded-none overflow-hidden border border-black/[0.07] dark:border-white/[0.07]">
+                                        {Visual && <Visual />}
                                     </div>
-                                </div>
-                                {Visual && <Visual />}
-                            </motion.div>
+                                    
+                                    {/* Text side */}
+                                    <div className="w-full md:w-1/2 flex flex-col justify-center py-2 md:py-4">
+                                        <p className="text-[14px] md:text-[15px] leading-relaxed text-neutral-600 dark:text-neutral-400 mb-8">
+                                            {disc.description}
+                                        </p>
+                                        
+                                        {/* Tags like nav bar with | */}
+                                        <div className="flex flex-wrap items-center gap-3 mt-auto text-[12px] md:text-[13px] font-medium tracking-wide uppercase text-neutral-500 dark:text-neutral-500">
+                                            {disc.tags.map((tag, idx) => (
+                                                <div key={tag} className="flex items-center gap-3">
+                                                    <span>{tag}</span>
+                                                    {idx < disc.tags.length - 1 && (
+                                                        <span className="text-neutral-300 dark:text-neutral-700 select-none">|</span>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            </div>
                         );
                     })}
                 </div>
 
-                {/* ── Philosophy Pillars ── */}
-                <motion.div {...fadeUp(0.05)} className="mb-14 md:mb-16">
-                    <p className="mb-6 text-[11px] font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500">
-                        How We Think
-                    </p>
-                    <div className="grid gap-4 sm:grid-cols-3">
-                        {pillars.map((p, i) => {
-                            const Icon = p.icon;
-                            return (
-                                <motion.div
-                                    key={p.title}
-                                    {...fadeUp(0.08 + i * 0.09)}
-                                    className="rounded-2xl border border-black/[0.07] bg-neutral-50 p-6 dark:border-white/[0.07] dark:bg-white/[0.03]"
-                                >
-                                    <div className="mb-4 flex items-center gap-3">
-                                        <span className="text-2xl font-bold text-black/[0.16] dark:text-white/[0.24] font-mono select-none">
-                                            {p.number}
-                                        </span>
-                                        <div className="h-px flex-1 bg-black/[0.12] dark:bg-white/[0.16]" />
-                                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#103651]/10 dark:bg-[#8FC6F2]/10">
-                                            <Icon className="h-4 w-4 text-[#103651] dark:text-[#8FC6F2]" />
-                                        </div>
-                                    </div>
-                                    <p className="mb-2 text-[15px] font-bold text-black dark:text-white">{p.title}</p>
-                                    <p className="text-sm leading-relaxed text-neutral-500 dark:text-neutral-400">{p.body}</p>
-                                </motion.div>
-                            );
-                        })}
-                    </div>
-                </motion.div>
 
                 {/* ── Credibility strip ── */}
-                <motion.div
-                    {...fadeUp(0.1)}
-                    className="rounded-2xl border border-black/[0.07] bg-neutral-50 dark:border-white/[0.07] dark:bg-white/[0.03] px-6 py-6 md:px-8"
-                >
-                    <p className="mb-5 text-[11px] font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500">
-                        Where We Have Worked
-                    </p>
-                    <div className="grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-4">
+                <motion.div {...fadeUp(0.1)} className="w-full mt-24 mb-10">
+                    <h3 className="text-lg text-gray-700 dark:text-neutral-300 text-center font-medium">
+                        Where we have worked
+                    </h3>
+                    <div className="flex flex-wrap items-center justify-center gap-12 mt-14 max-md:px-2 text-black dark:text-white opacity-60 hover:opacity-100 transition-opacity duration-500">
                         {credStats.map((item, i) => (
-                            <motion.div key={item.id} {...fadeUp(0.12 + i * 0.06)} className="flex flex-col gap-0.5">
-                                <p className={`text-[18px] min-h-[40px] flex items-center font-bold tracking-tight ${item.accent ? 'text-[#103651] dark:text-[#8FC6F2]' : 'text-black dark:text-white'}`}>
+                            <motion.div
+                                key={item.id}
+                                {...fadeUp(0.12 + i * 0.06)}
+                                className="flex flex-col items-center text-center"
+                            >
+                                <div className="h-[34px] flex items-center justify-center mb-3">
                                     {item.value}
-                                </p>
-                                <p className="text-xs text-neutral-400 dark:text-neutral-500 leading-snug">{item.label}</p>
+                                </div>
+                                <div className="text-xs font-medium tracking-wide text-neutral-500 dark:text-neutral-400 max-w-[140px] leading-relaxed">
+                                    {item.label}
+                                </div>
                             </motion.div>
                         ))}
                     </div>

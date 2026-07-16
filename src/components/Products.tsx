@@ -1,4 +1,4 @@
-import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   ArrowRight,
   BarChart3,
@@ -26,14 +26,9 @@ import {
   Wallet,
   type LucideIcon,
 } from 'lucide-react';
-import { useCallback, useEffect, useMemo, useRef, useState, type RefObject } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { showcaseTabs } from '../config/whatWeDoShowcase';
-import { GoogleGeminiEffect } from './ui/google-gemini-effect';
 
-const NAV_HEIGHT_PX = 76;
-const DESKTOP_BREAKPOINT_PX = 1200;
-const DESKTOP_SCROLL_VH_PER_SLIDE = 64;
-const DESKTOP_SCROLL_COMPLETION = 0.94;
 const ERP_AUTOPLAY_MS = 6200;
 
 
@@ -115,49 +110,6 @@ const getShowcaseHeaderIcon = (label: string): LucideIcon =>
 
 
 
-function useDesktopMode(minWidth = DESKTOP_BREAKPOINT_PX) {
-  const [isDesktop, setIsDesktop] = useState(() => {
-    if (typeof window === 'undefined') return true;
-    return window.innerWidth >= minWidth;
-  });
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const mediaQuery = window.matchMedia(`(min-width: ${minWidth}px)`);
-    const onChange = (event: MediaQueryListEvent) => setIsDesktop(event.matches);
-
-    mediaQuery.addEventListener('change', onChange);
-    return () => mediaQuery.removeEventListener('change', onChange);
-  }, [minWidth]);
-
-  return isDesktop;
-}
-
-function useElementWidth<T extends HTMLElement>(ref: RefObject<T | null>) {
-  const [width, setWidth] = useState(0);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const element = ref.current;
-    if (!element) return;
-
-    const update = () => setWidth(element.clientWidth);
-    update();
-
-    const resizeObserver = new ResizeObserver(update);
-    resizeObserver.observe(element);
-    window.addEventListener('resize', update);
-
-    return () => {
-      resizeObserver.disconnect();
-      window.removeEventListener('resize', update);
-    };
-  }, [ref]);
-
-  return width;
-}
-
 function linePoints(values: number[]) {
   const safe = values.length ? values : [10, 20, 25, 35, 45, 53, 63];
   const max = Math.max(...safe, 1);
@@ -224,7 +176,7 @@ function ErpAccountsScene() {
     <div className="grid h-full grid-cols-[34px_minmax(0,1fr)] bg-[#f7f8fa] dark:bg-[#0d1117]">
       <aside className="flex flex-col border-r border-[#e0e4ea] bg-[#f4f5f8] px-1 py-2 dark:border-[#21262d] dark:bg-[#161b22]">
         <div className="grid place-items-center">
-          <div className="grid h-5 w-5 place-items-center rounded bg-[#1284eb] text-white dark:bg-[#58a6ff]">
+          <div className="grid h-5 w-5 place-items-center rounded bg-[#1284eb] text-white dark:bg-[#3F618C]">
             <Receipt className="h-3 w-3" />
           </div>
         </div>
@@ -421,7 +373,7 @@ function ErpOnboardingScene() {
               type="button"
               onClick={() => setActiveStep(stepIndex)}
               className={`h-2.5 w-2.5 rounded-full border ${activeStep === stepIndex
-                ? 'border-[#9da4b2] bg-[#2b2f38] dark:border-[#58a6ff] dark:bg-[#58a6ff]'
+                ? 'border-[#9da4b2] bg-[#2b2f38] dark:border-[#3F618C] dark:bg-[#3F618C]'
                 : 'border-[#b6bcc7] bg-[#f5f5f6] hover:border-[#8d97a7] dark:border-[#30363d] dark:bg-[#161b22] dark:hover:border-[#484f58]'
                 }`}
               aria-label={`Select onboarding step ${stepIndex + 1}`}
@@ -463,7 +415,7 @@ function ErpOnboardingScene() {
             <button
               type="button"
               onClick={() => setActiveStep((current) => (current + 1) % 3)}
-              className="rounded bg-[#1e232e] px-2.5 py-1 text-[10px] font-semibold text-white transition-colors hover:bg-[#2d3442] dark:bg-[#58a6ff] dark:text-black dark:hover:bg-[#79c0ff]"
+              className="rounded bg-[#1e232e] px-2.5 py-1 text-[10px] font-semibold text-white transition-colors hover:bg-[#2d3442] dark:bg-[#3F618C] dark:text-black dark:hover:bg-[#79c0ff]"
             >
               Next
             </button>
@@ -527,7 +479,7 @@ function ErpOpportunityScene() {
       <div className="min-w-0">
         <div className="flex items-center justify-between border-b border-[#e0e4ea] px-2 py-1.5 text-[9px] text-[#6b7484] dark:border-[#21262d] dark:text-[#8b949e]">
           <p className="font-semibold">/ CRM / Opportunity / New Opportunity</p>
-          <button className="rounded bg-[#1d232d] px-2 py-1 text-[8px] font-semibold text-white dark:bg-[#58a6ff] dark:text-black">
+          <button className="rounded bg-[#1d232d] px-2 py-1 text-[8px] font-semibold text-white dark:bg-[#3F618C] dark:text-black">
             <Save className="mr-1 inline h-2.5 w-2.5" />
             Save
           </button>
@@ -540,7 +492,7 @@ function ErpOpportunityScene() {
               type="button"
               onClick={() => setActiveTab(tab)}
               className={`mr-3 border-b pb-1 ${activeTab === tab
-                ? 'border-[#2f3645] font-semibold text-[#2f3645] dark:border-[#58a6ff] dark:text-[#e6edf3]'
+                ? 'border-[#2f3645] font-semibold text-[#2f3645] dark:border-[#3F618C] dark:text-[#e6edf3]'
                 : 'border-transparent text-[#758195] hover:text-[#596983] dark:text-[#8b949e] dark:hover:text-[#c9d1d9]'
                 }`}
             >
@@ -727,7 +679,7 @@ function ErpCrmDashboardScene() {
               key={label}
               type="button"
               onClick={() => setActiveMetric(index)}
-              className={`rounded border bg-white px-2 py-1.5 text-left dark:bg-[#161b22] ${activeMetric === index ? 'border-[#a9bbd2] dark:border-[#58a6ff]' : 'border-[#dce2ec] hover:border-[#bcc9db] dark:border-[#21262d] dark:hover:border-[#484f58]'
+              className={`rounded border bg-white px-2 py-1.5 text-left dark:bg-[#161b22] ${activeMetric === index ? 'border-[#a9bbd2] dark:border-[#3F618C]' : 'border-[#dce2ec] hover:border-[#bcc9db] dark:border-[#21262d] dark:hover:border-[#484f58]'
                 }`}
             >
               <p className="text-[8px] text-[#77849a] dark:text-[#8b949e]">{label}</p>
@@ -810,7 +762,7 @@ function ErpAppSwitcherScene() {
                 className="rounded-md px-1 py-0.5 text-center transition-colors hover:bg-[#f1f5fb] dark:hover:bg-[#1c2333]"
               >
                 <div
-                  className={`mx-auto grid h-8 w-8 place-items-center rounded-lg text-white ${activeApp === label ? 'bg-[#0d76d8] dark:bg-[#1f6feb]' : 'bg-[#1687eb] dark:bg-[#58a6ff]'
+                  className={`mx-auto grid h-8 w-8 place-items-center rounded-lg text-white ${activeApp === label ? 'bg-[#0d76d8] dark:bg-[#1f6feb]' : 'bg-[#1687eb] dark:bg-[#3F618C]'
                     }`}
                 >
                   <Icon className="h-4 w-4" />
@@ -851,7 +803,7 @@ export function ErpReplicaPreview() {
 
   return (
     <div
-      className="relative mx-auto w-full max-w-[640px] overflow-hidden rounded-xl border border-[#d6dde8] bg-[#f6f7f9] shadow-[0_18px_34px_rgba(15,23,42,0.12)] dark:border-[#21262d] dark:bg-[#0d1117] dark:shadow-[0_18px_34px_rgba(0,0,0,0.4)]"
+      className="relative mx-auto w-full max-w-[640px] overflow-hidden border border-[#d6dde8] bg-[#f6f7f9] shadow-[0_18px_34px_rgba(15,23,42,0.12)] dark:border-[#21262d] dark:bg-[#0d1117] dark:shadow-[0_18px_34px_rgba(0,0,0,0.4)]"
       style={{ fontFamily: 'Inter, "Segoe UI", "Helvetica Neue", Arial, sans-serif' }}
     >
       <div className="pointer-events-none absolute inset-0 z-20">
@@ -868,7 +820,7 @@ export function ErpReplicaPreview() {
                 initial={{ opacity: 0.7, scale: 0.35 }}
                 animate={{ opacity: 0, scale: 1.8 }}
                 transition={{ duration: 0.42, ease: 'easeOut' }}
-                className="absolute left-2 top-1.5 h-2.5 w-2.5 rounded-full border border-[#264a76] dark:border-[#58a6ff]"
+                className="absolute left-2 top-1.5 h-2.5 w-2.5 rounded-full border border-[#264a76] dark:border-[#3F618C]"
               />
             ) : null}
           </div>
@@ -981,7 +933,7 @@ export function CadWorkspaceScene() {
           {/* L-bracket body */}
           <motion.path
             d="M120 80 L320 80 L320 130 L220 130 L220 270 L120 270 Z"
-            stroke="#58a6ff"
+            stroke="#3F618C"
             strokeWidth="1.5"
             fill="none"
             initial={{ pathLength: 0 }}
@@ -994,12 +946,12 @@ export function CadWorkspaceScene() {
             animate={{ opacity: 0.5 }}
             transition={{ delay: 1.5, duration: 0.8 }}
           >
-            <line x1="120" y1="80" x2="150" y2="55" stroke="#58a6ff" strokeWidth="0.8" />
-            <line x1="320" y1="80" x2="350" y2="55" stroke="#58a6ff" strokeWidth="0.8" />
-            <line x1="320" y1="130" x2="350" y2="105" stroke="#58a6ff" strokeWidth="0.8" />
-            <line x1="120" y1="270" x2="150" y2="245" stroke="#58a6ff" strokeWidth="0.8" />
-            <line x1="220" y1="270" x2="250" y2="245" stroke="#58a6ff" strokeWidth="0.8" />
-            <path d="M150 55 L350 55 L350 105 L250 105 L250 245 L150 245 Z" stroke="#58a6ff" strokeWidth="0.8" fill="none" />
+            <line x1="120" y1="80" x2="150" y2="55" stroke="#3F618C" strokeWidth="0.8" />
+            <line x1="320" y1="80" x2="350" y2="55" stroke="#3F618C" strokeWidth="0.8" />
+            <line x1="320" y1="130" x2="350" y2="105" stroke="#3F618C" strokeWidth="0.8" />
+            <line x1="120" y1="270" x2="150" y2="245" stroke="#3F618C" strokeWidth="0.8" />
+            <line x1="220" y1="270" x2="250" y2="245" stroke="#3F618C" strokeWidth="0.8" />
+            <path d="M150 55 L350 55 L350 105 L250 105 L250 245 L150 245 Z" stroke="#3F618C" strokeWidth="0.8" fill="none" />
           </motion.g>
           {/* Bolt holes */}
           {[[155, 95], [290, 95], [155, 230], [185, 230]].map(([cx, cy], i) => (
@@ -1067,19 +1019,19 @@ export function CadWorkspaceScene() {
       {/* Right AI prompt panel */}
       <div className="flex w-[36%] min-w-[116px] max-w-[180px] shrink-0 flex-col border-l border-[#dde3ed] bg-[#f6f7f9] dark:border-[#21262d] dark:bg-[#161b22]">
         <div className="border-b border-[#dde3ed] px-2.5 py-2 dark:border-[#21262d]">
-          <p className="text-[10px] font-semibold text-[#2a5e87] dark:text-[#58a6ff]">AI Assistant</p>
+          <p className="text-[10px] font-semibold text-[#2a5e87] dark:text-[#3F618C]">AI Assistant</p>
           <p className="mt-0.5 text-[8px] text-[#8b949e]">CloudAICAD Agent v0.3</p>
         </div>
 
         {/* Chat history */}
         <div className="flex-1 space-y-2 overflow-hidden px-2 py-2">
           <div className="rounded-lg bg-white/80 px-2 py-1.5 text-[9px] leading-[1.4] text-[#24292f] dark:bg-[#0d1117]/80 dark:text-[#c9d1d9]">
-            <span className="font-semibold text-[#2a5e87] dark:text-[#58a6ff]">You:</span>{' '}
+            <span className="font-semibold text-[#2a5e87] dark:text-[#3F618C]">You:</span>{' '}
             {promptText.slice(0, typedChars)}
             <motion.span
               animate={{ opacity: [1, 0] }}
               transition={{ duration: 0.6, repeat: Infinity }}
-              className="inline-block h-2.5 w-[1px] bg-[#2a5e87] align-middle dark:bg-[#58a6ff]"
+              className="inline-block h-2.5 w-[1px] bg-[#2a5e87] align-middle dark:bg-[#3F618C]"
             />
           </div>
           {typedChars > promptText.length - 10 && (
@@ -1088,7 +1040,7 @@ export function CadWorkspaceScene() {
               animate={{ opacity: 1, y: 0 }}
               className="rounded-lg bg-[#2a5e87]/10 px-2 py-1.5 text-[9px] leading-[1.4] text-[#24292f] dark:bg-[#1f6feb]/10 dark:text-[#c9d1d9]"
             >
-              <span className="font-semibold text-[#2a5e87] dark:text-[#58a6ff]">AI:</span>{' '}
+              <span className="font-semibold text-[#2a5e87] dark:text-[#3F618C]">AI:</span>{' '}
               Generating bracket... Applying ISO 4762 M6 constraints. Adding 3mm fillets to all edges.
             </motion.div>
           )}
@@ -1216,13 +1168,13 @@ function CadSimulationScene() {
       {/* Right AI panel — showing simulation chat */}
       <div className="flex w-[36%] min-w-[116px] max-w-[180px] shrink-0 flex-col border-l border-[#dde3ed] bg-[#f6f7f9] dark:border-[#21262d] dark:bg-[#161b22]">
         <div className="border-b border-[#dde3ed] px-2.5 py-2 dark:border-[#21262d]">
-          <p className="text-[10px] font-semibold text-[#2a5e87] dark:text-[#58a6ff]">AI Assistant</p>
+          <p className="text-[10px] font-semibold text-[#2a5e87] dark:text-[#3F618C]">AI Assistant</p>
           <p className="mt-0.5 text-[8px] text-[#8b949e]">Simulation Mode</p>
         </div>
 
         <div className="flex-1 space-y-2 overflow-hidden px-2 py-2">
           <div className="rounded-lg bg-white/80 px-2 py-1.5 text-[9px] leading-[1.4] text-[#24292f] dark:bg-[#0d1117]/80 dark:text-[#c9d1d9]">
-            <span className="font-semibold text-[#2a5e87] dark:text-[#58a6ff]">You:</span>{' '}
+            <span className="font-semibold text-[#2a5e87] dark:text-[#3F618C]">You:</span>{' '}
             Run thermal analysis on this bracket, assume aluminium 6061, 200W heat source at bolt holes
           </div>
           <motion.div
@@ -1231,7 +1183,7 @@ function CadSimulationScene() {
             transition={{ delay: 0.5 }}
             className="rounded-lg bg-[#2a5e87]/10 px-2 py-1.5 text-[9px] leading-[1.4] text-[#24292f] dark:bg-[#1f6feb]/10 dark:text-[#c9d1d9]"
           >
-            <span className="font-semibold text-[#2a5e87] dark:text-[#58a6ff]">AI:</span>{' '}
+            <span className="font-semibold text-[#2a5e87] dark:text-[#3F618C]">AI:</span>{' '}
             Thermal simulation complete. Peak temp 423°C at bolt hole interfaces. Recommended: increase fillet radius to 5mm for better heat dissipation.
           </motion.div>
           <motion.div
@@ -1279,7 +1231,7 @@ function CadReplicaPreview() {
 
   return (
     <div
-      className="relative mx-auto w-full max-w-[640px] overflow-hidden rounded-xl border border-[#d6dde8] bg-[#f6f7f9] shadow-[0_18px_34px_rgba(15,23,42,0.12)] dark:border-[#21262d] dark:bg-[#0d1117] dark:shadow-[0_18px_34px_rgba(0,0,0,0.4)]"
+      className="relative mx-auto w-full max-w-[640px] overflow-hidden border border-[#d6dde8] bg-[#f6f7f9] shadow-[0_18px_34px_rgba(15,23,42,0.12)] dark:border-[#21262d] dark:bg-[#0d1117] dark:shadow-[0_18px_34px_rgba(0,0,0,0.4)]"
       style={{ fontFamily: 'Inter, "Segoe UI", "Helvetica Neue", Arial, sans-serif' }}
     >
       {/* Animated cursor */}
@@ -1297,7 +1249,7 @@ function CadReplicaPreview() {
                 initial={{ opacity: 0.7, scale: 0.35 }}
                 animate={{ opacity: 0, scale: 1.8 }}
                 transition={{ duration: 0.42, ease: 'easeOut' }}
-                className="absolute left-2 top-1.5 h-2.5 w-2.5 rounded-full border border-[#264a76] dark:border-[#58a6ff]"
+                className="absolute left-2 top-1.5 h-2.5 w-2.5 rounded-full border border-[#264a76] dark:border-[#3F618C]"
               />
             ) : null}
           </div>
@@ -1327,265 +1279,247 @@ function CadReplicaPreview() {
 }
 
 
-function SlideContent({
-  tab,
-  index,
-  total,
-  onContactOpen,
-}: {
-  tab: (typeof showcaseTabs)[number];
-  index: number;
-  total: number;
-  onContactOpen: () => void;
-}) {
-  const HeaderIcon = getShowcaseHeaderIcon(tab.label);
-  const stepNumber = String(index + 1).padStart(2, '0');
-
-  /* ─── Showcase section (top) ─── */
-  const showcase = (() => {
-    if (tab.key === 'custom') {
-      return (
-        <GoogleGeminiEffect
-          className="min-h-[320px] sm:min-h-[360px] xl:min-h-[400px]"
-          ctaText="Tailored Optimised Intelligently Engineered Solutions"
-        />
-      );
-    }
-    if (tab.key === 'erp') return <ErpReplicaPreview />;
-    return <CadReplicaPreview />;
-  })();
+function IotReplicaPreview() {
+  const [weight, setWeight] = useState(254.3);
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setWeight(prev => Number((prev + (Math.random() * 0.4 - 0.2)).toFixed(1)));
+    }, 1200);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <div className="flex h-full flex-col">
-      {/* Preview section */}
-      <div className="relative w-full overflow-hidden">
-        {showcase}
-      </div>
-
-      {/* Text content — sits below the preview, never overlaps */}
-      <div className="relative z-10 border-t border-black/5 bg-white px-5 py-4 dark:border-white/5 dark:bg-neutral-950 sm:px-7 sm:py-5 xl:px-9 xl:py-6">
-        <div className="mb-3 flex items-center gap-3 sm:mb-3.5">
-          <span className="select-none font-mono text-2xl font-bold text-black/15 dark:text-white/24">
-            {stepNumber}
-          </span>
-          <div className="h-px flex-1 bg-black/10 dark:bg-white/14" />
-          <div className="inline-flex items-center gap-1.5 rounded-lg bg-[#103651]/10 px-2.5 py-1.5 dark:bg-[#8FC6F2]/10">
-            <HeaderIcon className="h-3.5 w-3.5 text-[#103651] dark:text-[#8FC6F2]" />
-            <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#103651] dark:text-[#8FC6F2]">
-              {tab.label}
-            </span>
-            <span className="text-[10px] text-neutral-500 dark:text-neutral-400">
-              {index + 1}/{total}
-            </span>
-          </div>
+    <div
+      className="relative mx-auto w-full max-w-[640px] overflow-hidden rounded-xl border border-[#d6dde8] bg-[#f6f7f9] shadow-[0_18px_34px_rgba(15,23,42,0.12)] dark:border-[#21262d] dark:bg-[#0d1117] dark:shadow-[0_18px_34px_rgba(0,0,0,0.4)]"
+      style={{ fontFamily: 'Inter, "Segoe UI", "Helvetica Neue", Arial, sans-serif' }}
+    >
+      <div className="aspect-[16/10] w-full overflow-hidden flex bg-[#0a0d12]">
+        
+        {/* Sidebar */}
+        <div className="flex w-9 shrink-0 flex-col items-center gap-1.5 border-r border-[#21262d] bg-[#161b22] px-1 py-2">
+          {[LayoutDashboard, Search, Settings].map((Icon, i) => (
+            <div key={i} className={`flex h-6 w-6 items-center justify-center rounded text-[10px] ${i === 0 ? 'bg-[#1f6feb] text-white' : 'text-[#8b949e]'}`}>
+              <Icon className="h-3 w-3" />
+            </div>
+          ))}
         </div>
 
-        <h3 className="text-lg font-bold tracking-tight text-black dark:text-white sm:text-xl xl:text-2xl">
-          {tab.title}
-        </h3>
+        {/* Dashboard Main */}
+        <div className="flex-1 p-3">
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <p className="text-[10px] font-semibold text-[#3F618C]">Line 1 Control Center</p>
+              <p className="text-[8px] text-[#8b949e]">Hardware Telemetry & Vision</p>
+            </div>
+            <div className="flex items-center gap-1 rounded bg-emerald-500/10 px-2 py-0.5 text-[8px] text-emerald-400">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              Live Sync
+            </div>
+          </div>
 
-        <p className="mt-1.5 max-w-2xl text-[13px] leading-relaxed text-neutral-500 dark:text-neutral-400 sm:text-sm">
-          {tab.description}
-        </p>
+          <div className="grid grid-cols-2 gap-3 h-[calc(100%-40px)]">
+            
+            {/* Weight Scale Integration */}
+            <div className="flex flex-col gap-3">
+              <div className="rounded-lg border border-[#21262d] bg-[#161b22] p-3 flex-1 flex flex-col justify-center items-center relative overflow-hidden">
+                <p className="text-[9px] text-[#8b949e] absolute top-2 left-3">MODBUS / Scale 01</p>
+                <motion.div 
+                  key={weight}
+                  initial={{ opacity: 0.7, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="font-mono text-3xl font-bold text-white tracking-tight"
+                >
+                  {weight.toFixed(1)} <span className="text-sm text-[#8b949e]">kg</span>
+                </motion.div>
+                <div className="absolute bottom-2 right-3 text-[8px] text-emerald-400 flex items-center gap-1">
+                  <CheckCircle2 className="h-2 w-2" /> Tolerances Met
+                </div>
+              </div>
 
-        <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-1.5 sm:mt-4">
-          {tab.outcomes.map((outcome) => (
-            <li key={outcome} className="inline-flex items-start gap-1.5 text-[12px] text-neutral-600 dark:text-neutral-300 sm:text-sm">
-              <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#103651] dark:text-[#8FC6F2]" />
-              {outcome}
-            </li>
-          ))}
-        </ul>
+              {/* PLC Parameter Logs */}
+              <div className="rounded-lg border border-[#21262d] bg-[#161b22] p-2 flex-1 flex flex-col">
+                <p className="text-[9px] text-[#8b949e] mb-2">CNC Tool Parameters (OPC UA)</p>
+                <div className="space-y-1">
+                  {['Spindle Speed', 'Feed Rate', 'Coolant Temp'].map((label, i) => (
+                    <div key={label} className="flex justify-between items-center bg-[#0d1117] px-2 py-1 rounded">
+                      <span className="text-[8px] text-neutral-400">{label}</span>
+                      <span className="text-[8px] font-mono text-white">{[12000, 450, 22.4][i]} {[ 'RPM', 'mm/m', '°C'][i]}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
 
-        <div className="mt-4 flex flex-wrap items-center gap-3 sm:mt-5 sm:gap-4">
-          {tab.ctaIsExternal ? (
-            <a
-              href={tab.ctaHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full bg-black px-4 py-2 text-[13px] font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-neutral-800 hover:shadow-lg dark:bg-white dark:text-black dark:hover:bg-neutral-200 sm:px-5 sm:py-2.5 sm:text-sm"
-            >
-              {tab.ctaLabel}
-              <ArrowRight className="h-4 w-4" />
-            </a>
-          ) : (
-            <button
-              type="button"
-              onClick={onContactOpen}
-              className="inline-flex items-center gap-2 rounded-full bg-black px-4 py-2 text-[13px] font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-neutral-800 hover:shadow-lg dark:bg-white dark:text-black dark:hover:bg-neutral-200 sm:px-5 sm:py-2.5 sm:text-sm"
-            >
-              {tab.ctaLabel}
-              <ArrowRight className="h-4 w-4" />
-            </button>
-          )}
-          <button
-            type="button"
-            onClick={onContactOpen}
-            className="text-[13px] font-semibold text-neutral-600 transition-colors hover:text-black dark:text-neutral-400 dark:hover:text-white sm:text-sm"
-          >
-            {tab.secondaryCtaLabel}
-          </button>
+            {/* Vision Camera Feed */}
+            <div className="rounded-lg border border-[#21262d] bg-[#161b22] p-3 relative overflow-hidden flex flex-col">
+              <div className="flex justify-between items-center mb-2 z-10">
+                <p className="text-[9px] text-[#8b949e]">Quality Vision Camera</p>
+                <p className="text-[8px] font-mono text-[#3F618C]">CAM_02</p>
+              </div>
+              
+              {/* Fake Camera Feed Background */}
+              <div className="flex-1 bg-[#0d1117] rounded border border-[#21262d] relative overflow-hidden">
+                <svg className="absolute inset-0 h-full w-full opacity-30" aria-hidden>
+                  <defs>
+                    <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                      <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#4a5568" strokeWidth="0.5" />
+                    </pattern>
+                  </defs>
+                  <rect width="100%" height="100%" fill="url(#grid)" />
+                </svg>
+
+                {/* Bounding Box Animation */}
+                <motion.div 
+                  animate={{ x: [20, 22, 20], y: [20, 18, 20] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                  className="absolute left-6 top-6 w-16 h-16 border border-emerald-400 bg-emerald-400/10 flex items-end p-0.5"
+                >
+                  <span className="bg-emerald-400 text-black text-[6px] font-bold px-0.5">PASS 99%</span>
+                </motion.div>
+
+                {/* Scanning Laser */}
+                <motion.div
+                  animate={{ top: ['0%', '100%', '0%'] }}
+                  transition={{ duration: 4, ease: 'linear', repeat: Infinity }}
+                  className="absolute left-0 right-0 h-0.5 bg-emerald-400/50 shadow-[0_0_8px_rgba(52,211,153,0.8)]"
+                />
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
-function DesktopHorizontalTakeover({ onContactOpen }: { onContactOpen: () => void }) {
-  const sectionRef = useRef<HTMLElement | null>(null);
-  const trackViewportRef = useRef<HTMLDivElement | null>(null);
-  const trackViewportWidth = useElementWidth(trackViewportRef);
-  const slideCount = showcaseTabs.length;
-  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
-  const [viewportHeight, setViewportHeight] = useState(() => (typeof window === 'undefined' ? 1080 : window.innerHeight));
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const onResize = () => setViewportHeight(window.innerHeight);
-    onResize();
-    window.addEventListener('resize', onResize);
-
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
-
-  const sectionHeightPx = useMemo(
-    () => viewportHeight * (1 + (slideCount - 1) * (DESKTOP_SCROLL_VH_PER_SLIDE / 100)),
-    [viewportHeight, slideCount],
-  );
-  const sectionScrollablePx = useMemo(
-    () => Math.max(sectionHeightPx - viewportHeight, 1),
-    [sectionHeightPx, viewportHeight],
-  );
-  const sectionHeight = useMemo(() => `${sectionHeightPx}px`, [sectionHeightPx]);
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end end'],
-  });
-
-  useEffect(() => {
-    const unsubscribe = scrollYProgress.on('change', (latest) => {
-      if (slideCount <= 1) {
-        setActiveSlideIndex(0);
-        return;
-      }
-
-      const bounded = Math.max(0, Math.min(latest, DESKTOP_SCROLL_COMPLETION));
-      const normalized = bounded / DESKTOP_SCROLL_COMPLETION;
-      const snappedIndex = Math.round(normalized * (slideCount - 1));
-
-      setActiveSlideIndex((current) => (current === snappedIndex ? current : snappedIndex));
-    });
-
-    return () => unsubscribe();
-  }, [scrollYProgress, slideCount]);
-
-  const x = useMemo(() => -activeSlideIndex * trackViewportWidth, [activeSlideIndex, trackViewportWidth]);
-  const progressWidth = useTransform(scrollYProgress, [0, DESKTOP_SCROLL_COMPLETION], ['0%', '100%']);
-  const scrollHintOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
-
-  const anchorOffsets = useMemo(() => {
-    const divisor = Math.max(slideCount - 1, 1);
-    const anchorTopOffsetPx = NAV_HEIGHT_PX + 20;
-
-    return showcaseTabs.map((tab, tabIndex) => ({
-      key: tab.key,
-      top: `${anchorTopOffsetPx + ((tabIndex / divisor) * DESKTOP_SCROLL_COMPLETION * sectionScrollablePx)}px`,
-    }));
-  }, [slideCount, sectionScrollablePx]);
-
+function ServiceDescriptions() {
   return (
-    <section
-      id="what-we-do"
-      ref={sectionRef}
-      className="relative bg-neutral-50 dark:bg-black transition-colors duration-300 scroll-mt-24"
-      style={{ height: sectionHeight }}
-    >
-      {anchorOffsets.map((anchor) => (
-        <div
-          key={anchor.key}
-          id={anchor.key}
-          className="absolute left-0 h-px w-px"
-          style={{ top: anchor.top, scrollMarginTop: `${NAV_HEIGHT_PX + 20}px` }}
-        />
-      ))}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 mt-24 lg:mt-32 border-t border-white/5 pt-16">
+      {showcaseTabs.map((tab) => {
+        const HeaderIcon = getShowcaseHeaderIcon(tab.label);
+        
+        let ShowcaseAnim = null;
+        if (tab.key === 'erp') ShowcaseAnim = <ErpReplicaPreview />;
+        if (tab.key === 'cad') ShowcaseAnim = <CadReplicaPreview />;
+        // If IoT was added back, we'd add it here as well
 
-      <div
-        className="sticky overflow-hidden"
-        style={{ top: `${NAV_HEIGHT_PX}px`, height: `calc(100dvh - ${NAV_HEIGHT_PX}px)` }}
-      >
-        <div className="mx-auto h-full w-full max-w-7xl px-6 py-6">
-          <div className="flex items-center justify-between gap-3">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#103651] dark:text-[#8FC6F2]">
-              What We Do
+        return (
+          <div key={tab.key} className="flex flex-col group">
+            {ShowcaseAnim && (
+               <div className="w-full mb-10 relative rounded-lg overflow-hidden shadow-2xl">
+                 <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/20 to-emerald-500/20 blur opacity-0 group-hover:opacity-100 transition duration-1000"></div>
+                 <div className="relative">
+                   {ShowcaseAnim}
+                 </div>
+               </div>
+            )}
+            <div className="w-12 h-12 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-center mb-6 transition-colors group-hover:bg-white/[0.06]">
+              <HeaderIcon className="w-5 h-5 text-neutral-300" />
+            </div>
+            <h3 className="text-xl font-medium text-white mb-3 tracking-tight">{tab.title}</h3>
+            <p className="text-neutral-400 leading-relaxed text-[15px] mb-6">
+              {tab.description}
             </p>
-            <motion.p className="text-xs text-neutral-500 dark:text-neutral-400" style={{ opacity: scrollHintOpacity }}>
-              Scroll
-            </motion.p>
-          </div>
-
-          <div className="mt-2 h-px w-full bg-black/10 dark:bg-white/10">
-            <motion.div className="h-full bg-[#103651] dark:bg-[#8FC6F2]" style={{ width: progressWidth }} />
-          </div>
-
-          <div
-            ref={trackViewportRef}
-            className="mt-5 h-[calc(100%-56px)] overflow-hidden rounded-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-neutral-950"
-          >
-            <motion.div
-              className="flex h-full will-change-transform"
-              animate={{ x }}
-              transition={{ type: 'spring', stiffness: 180, damping: 28, mass: 0.45 }}
-              style={{
-                width: trackViewportWidth > 0 ? `${trackViewportWidth * slideCount}px` : `${slideCount * 100}%`,
-              }}
-            >
-              {showcaseTabs.map((tab, tabIndex) => (
-                <section
-                  key={tab.key}
-                  className="h-full shrink-0 p-6 xl:p-8"
-                  style={{ width: trackViewportWidth > 0 ? `${trackViewportWidth}px` : `${100 / slideCount}%` }}
-                >
-                  <SlideContent tab={tab} index={tabIndex} total={slideCount} onContactOpen={onContactOpen} />
-                </section>
+            <ul className="space-y-3">
+              {tab.outcomes.map((outcome, idx) => (
+                <li key={idx} className="flex items-start gap-3 text-[14px] text-neutral-300">
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#3F618C] mt-2 shrink-0" />
+                  <span className="leading-relaxed">{outcome}</span>
+                </li>
               ))}
-            </motion.div>
+            </ul>
           </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function MobileStacked({ onContactOpen }: { onContactOpen: () => void }) {
-  return (
-    <section id="what-we-do" className="py-20 bg-neutral-50 dark:bg-black transition-colors duration-300 scroll-mt-24">
-      <div className="container mx-auto max-w-7xl px-4">
-        <div className="mb-10">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#103651] dark:text-[#8FC6F2]">
-            What We Do
-          </p>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight text-black dark:text-white">Explore Our Core Offerings</h2>
-        </div>
-
-        <div className="space-y-5">
-          {showcaseTabs.map((tab, tabIndex) => (
-            <article
-              key={tab.key}
-              id={tab.key}
-              className="rounded-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-neutral-950 p-5"
-            >
-              <SlideContent tab={tab} index={tabIndex} total={showcaseTabs.length} onContactOpen={onContactOpen} />
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
+        );
+      })}
+    </div>
   );
 }
 
 export default function Products({ onContactOpen }: { onContactOpen: () => void }) {
-  const isDesktop = useDesktopMode();
-  return isDesktop ? <DesktopHorizontalTakeover onContactOpen={onContactOpen} /> : <MobileStacked onContactOpen={onContactOpen} />;
+  return (
+    <section id="services" className="relative pt-24 pb-24 bg-[#0a0a0a] transition-colors duration-300 scroll-mt-24 font-sans overflow-hidden">
+      
+      <div className="container mx-auto max-w-[1400px] px-6 md:px-12 relative z-10">
+        
+        {/* Section Header */}
+        <div className="text-center mb-16 md:mb-20">
+          <div className="flex items-center justify-center gap-4">
+              <div className="h-[1px] w-12 md:w-20 bg-neutral-800" />
+              <span className="text-[10px] md:text-xs font-bold uppercase tracking-[0.25em] text-[#3F618C]">
+                  Our Services
+              </span>
+              <div className="h-[1px] w-12 md:w-20 bg-neutral-800" />
+          </div>
+        </div>
+
+        {/* Top Split View: Balanced Text + Visual Context */}
+        <div className="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-12 lg:gap-20 items-center">
+          
+          {/* Left: Balanced Copy */}
+          <div className="order-2 lg:order-1 flex flex-col justify-center max-w-[500px] mx-auto lg:mx-0">
+            <h2 className="text-4xl lg:text-[44px] font-bold leading-[1.15] mb-6 text-[#f5f5f5] tracking-tight text-balance">
+              Adaptable across all industries
+            </h2>
+            
+            <p className="text-[17px] lg:text-[19px] text-[#a1a1aa] mb-8 leading-relaxed text-balance">
+              Whether managing a high-volume restaurant or a precision manufacturing floor, our adaptable software fits your exact needs. Accelerate operations by offloading complex workflows to intelligent systems, freeing you to focus on critical decisions.
+            </p>
+            
+            <button 
+              onClick={onContactOpen}
+              className="text-[#3F618C] hover:text-[#5b80ab] text-[15px] font-semibold flex items-center gap-2 transition-colors w-fit"
+            >
+              Learn about our solutions <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Right: Visual Context (Images) */}
+          <div className="order-1 lg:order-2 w-full flex justify-center lg:justify-end relative h-[300px] sm:h-[400px] lg:h-[480px]">
+            <div className="relative w-full max-w-[640px] h-full flex items-center justify-center">
+                {/* Decorative Elements */}
+                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-emerald-500/5 blur-[120px] z-0 pointer-events-none" />
+                
+                {/* Manufacturing Image - Background, offset left and top */}
+                <motion.div 
+                  initial={{ opacity: 0, x: -30, y: -20 }}
+                  whileInView={{ opacity: 1, x: 0, y: 0 }}
+                  viewport={{ once: false, margin: "-100px" }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
+                  className="absolute left-0 top-[5%] w-[70%] md:w-[60%] h-[60%] rounded-xl overflow-hidden shadow-2xl border border-white/10 z-10"
+                >
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/90 via-transparent to-transparent z-10" />
+                    <img src="/industry-cad-demo.jpg" alt="Industrial Manufacturing" className="w-full h-full object-cover brightness-90" />
+                    <div className="absolute bottom-4 left-4 z-20">
+                        <p className="text-white font-medium text-xs sm:text-sm tracking-wide drop-shadow-lg whitespace-nowrap">Industrial Engineering</p>
+                    </div>
+                </motion.div>
+
+                {/* Restaurant Image - Foreground, offset right and bottom */}
+                <motion.div 
+                  initial={{ opacity: 0, x: 30, y: 20 }}
+                  whileInView={{ opacity: 1, x: 0, y: 0 }}
+                  viewport={{ once: false, margin: "-100px" }}
+                  transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+                  className="absolute right-0 bottom-[5%] w-[70%] md:w-[60%] h-[60%] rounded-xl overflow-hidden shadow-2xl border border-white/10 z-20"
+                >
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/90 via-transparent to-transparent z-10" />
+                    <img src="/restaurant-erp-demo.jpg" alt="Restaurant Management" className="w-full h-full object-cover brightness-90" />
+                    <div className="absolute bottom-4 left-4 z-20">
+                        <p className="text-white font-medium text-xs sm:text-sm tracking-wide drop-shadow-lg whitespace-nowrap">Hospitality & Retail</p>
+                    </div>
+                </motion.div>
+                
+            </div>
+          </div>
+          
+        </div>
+
+        {/* Bottom Descriptions Grid */}
+        <ServiceDescriptions />
+
+      </div>
+    </section>
+  );
 }

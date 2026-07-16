@@ -1,4 +1,4 @@
-export type ShowcaseTabKey = 'erp' | 'custom' | 'cad';
+export type ShowcaseTabKey = 'erp' | 'iot' | 'cad';
 
 export interface ShowcaseScreenshot {
   id: string;
@@ -55,43 +55,7 @@ export const showcaseTabs: ShowcaseTab[] = [
       },
     ],
   },
-  {
-    key: 'custom',
-    label: 'Service',
-    title: 'Custom Software & Engineering Services',
-    description:
-      'Our engineering team designs, builds, and deploys bespoke software aligned to your processes and hardware, from legacy modernisation to full-stack operational platforms.',
-    outcomes: [
-      'Modernise legacy systems with cloud-ready architecture and minimal disruption',
-      'Integrate shop-floor machines, IoT signals, and enterprise platforms end to end',
-      'Deliver full-stack engineering from architecture through rollout and optimisation',
-    ],
-    ctaLabel: 'Discuss Your Requirements',
-    ctaHref: '#contact',
-    ctaIsExternal: false,
-    secondaryCtaLabel: 'Talk to Engineering',
-    secondaryCtaHref: '#contact',
-    screenshots: [
-      {
-        id: 'custom-architecture',
-        label: 'Architecture Plan',
-        hint: 'System architecture or integration map',
-        aspectRatio: '16 / 10',
-      },
-      {
-        id: 'custom-delivery',
-        label: 'Delivery Progress',
-        hint: 'Build/test/deploy tracking board or timeline',
-        aspectRatio: '16 / 10',
-      },
-      {
-        id: 'custom-ops',
-        label: 'Operations Panel',
-        hint: 'Live operations console or automation control UI',
-        aspectRatio: '16 / 10',
-      },
-    ],
-  },
+
   {
     key: 'cad',
     label: 'Product',

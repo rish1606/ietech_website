@@ -16,3 +16,7 @@ dist
 # OS
 .DS_Store
 *.log
+download_logos.sh
+old_repo/
+old_repo_sparse/
+tree.json

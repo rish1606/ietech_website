@@ -174,8 +174,8 @@ export function GoogleGeminiEffect({
             transition={{ duration: 7, times: UNIFIED_TIMES, repeat: Infinity, ease: 'easeInOut' }}
             className="absolute right-1.5 -translate-y-1/2 sm:right-4"
           >
-            <span className="inline-flex items-center gap-1 rounded-full border border-[#0A74FF]/40 bg-white px-2 py-0.5 text-[7px] font-medium text-[#0A74FF] shadow-[0_4px_12px_rgba(10,116,255,0.18)] dark:bg-[#0c182a] dark:text-[#58a6ff] dark:border-[#58a6ff]/40 sm:gap-1.5 sm:px-2.5 sm:py-1 sm:text-[9px]">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#0A74FF] dark:bg-[#58a6ff]" />
+            <span className="inline-flex items-center gap-1 rounded-full border border-[#0A74FF]/40 bg-white px-2 py-0.5 text-[7px] font-medium text-[#0A74FF] shadow-[0_4px_12px_rgba(10,116,255,0.18)] dark:bg-[#0c182a] dark:text-[#3F618C] dark:border-[#3F618C]/40 sm:gap-1.5 sm:px-2.5 sm:py-1 sm:text-[9px]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#0A74FF] dark:bg-[#3F618C]" />
               Quality Outputs
             </span>
           </motion.div>

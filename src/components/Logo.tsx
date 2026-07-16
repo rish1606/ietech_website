@@ -136,7 +136,7 @@ export default function Logo({ className, animated = false }: LogoProps) {
                             fontFamily="'Montserrat', sans-serif"
                             fontWeight="700"
                             fontSize="90"
-                            className="fill-[#103651] dark:fill-[#8FC6F2] transition-colors duration-300"
+                            className="fill-[#274060] dark:fill-[#3F618C] transition-colors duration-300"
                             textAnchor="start"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: [0, 0, 1, 1] }}
@@ -166,7 +166,7 @@ export default function Logo({ className, animated = false }: LogoProps) {
                     fontWeight="700"
                     fontSize="90"
                     letterSpacing="-1.5"
-                    className="fill-[#103651] dark:fill-[#8FC6F2] transition-colors duration-300"
+                    className="fill-[#274060] dark:fill-[#3F618C] transition-colors duration-300"
                     textAnchor="start"
                 >
                     TECH

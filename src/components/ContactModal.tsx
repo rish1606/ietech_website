@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { X, Mail, Phone, Loader2, CheckCircle, ArrowRight, ShieldCheck } from 'lucide-react';
+import { X, Mail, Phone, Loader2, CheckCircle, ArrowRight } from 'lucide-react';
 
 interface ContactModalProps {
     isOpen: boolean;
@@ -14,7 +14,6 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
     const [isGoogleLoading, setIsGoogleLoading] = useState(false);
     const [error, setError] = useState('');
     const [submitted, setSubmitted] = useState(false);
-    const [googleAuthed, setGoogleAuthed] = useState(false);
     const hasFirebaseConfig = Boolean(
         import.meta.env.VITE_FIREBASE_API_KEY &&
         import.meta.env.VITE_FIREBASE_AUTH_DOMAIN &&
@@ -29,7 +28,6 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
         setSubmitted(false);
         setIsLoading(false);
         setIsGoogleLoading(false);
-        setGoogleAuthed(false);
         onClose();
     };
 
@@ -44,18 +42,16 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
 
         setIsLoading(true);
         try {
-            const [{ collection, addDoc, serverTimestamp }, { db }] = await Promise.all([
-                import('firebase/firestore'),
-                import('../firebase/config'),
-            ]);
-            await addDoc(collection(db, 'contacts'), {
+            const { db } = await import('../lib/firebase');
+            const { collection, addDoc } = await import('firebase/firestore');
+            await addDoc(collection(db, 'contact_submissions'), {
                 email,
-                phone: phone || null,
-                source: googleAuthed ? 'google' : 'manual',
-                createdAt: serverTimestamp(),
+                phone,
+                createdAt: new Date().toISOString()
             });
             setSubmitted(true);
-        } catch {
+        } catch (err) {
+            console.error(err);
             setError('Something went wrong. Please try again.');
         } finally {
             setIsLoading(false);
@@ -73,14 +69,14 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
 
             const [{ GoogleAuthProvider, signInWithPopup }, { auth }] = await Promise.all([
                 import('firebase/auth'),
-                import('../firebase/config'),
+                import('../lib/firebase'),
             ]);
             const provider = new GoogleAuthProvider();
             provider.setCustomParameters({ prompt: 'select_account' });
             const result = await signInWithPopup(auth, provider);
             if (result.user.email) setEmail(result.user.email);
             if (result.user.phoneNumber) setPhone(result.user.phoneNumber);
-            setGoogleAuthed(true);
+            setSubmitted(true);
         } catch (err) {
             const code = typeof err === 'object' && err !== null && 'code' in err
                 ? String((err as { code?: string }).code ?? '')
@@ -121,7 +117,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                         exit={{ opacity: 0, scale: 0.97, y: 8 }}
                         transition={{ type: 'spring', stiffness: 320, damping: 28 }}
                         onClick={(e) => e.stopPropagation()}
-                        className="relative z-10 w-full max-w-[420px] overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_24px_64px_rgba(0,0,0,0.18)] dark:border-white/10 dark:bg-neutral-950 dark:shadow-[0_24px_64px_rgba(0,0,0,0.6)]"
+                        className="relative z-10 w-full max-w-[420px] overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_24px_64px_rgba(0,0,0,0.18)] dark:border-white/10 dark:bg-black dark:shadow-[0_24px_64px_rgba(0,0,0,0.6)]"
                     >
                         {/* Close button */}
                         <button
@@ -212,14 +208,9 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                                         <div>
                                             <label
                                                 htmlFor="contact-email"
-                                                className="mb-1.5 flex items-center gap-2 text-xs font-semibold text-neutral-600 dark:text-neutral-400"
+                                                className="mb-1.5 block text-xs font-semibold text-neutral-600 dark:text-neutral-400"
                                             >
                                                 Email address <span className="text-red-400">*</span>
-                                                {googleAuthed && (
-                                                    <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-medium text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400">
-                                                        <ShieldCheck className="h-3 w-3" /> Verified via Google
-                                                    </span>
-                                                )}
                                             </label>
                                             <div className="relative">
                                                 <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400 dark:text-neutral-500" />
@@ -230,7 +221,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                                                     onChange={(e) => setEmail(e.target.value)}
                                                     placeholder="you@company.com"
                                                     disabled={isLoading || isGoogleLoading}
-                                                    className="w-full rounded-xl border border-neutral-200 bg-neutral-50 py-3 pl-10 pr-4 text-sm text-black outline-none transition-colors placeholder:text-neutral-400 focus:border-[#103651] focus:ring-2 focus:ring-[#103651]/20 disabled:opacity-60 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder:text-neutral-500 dark:focus:border-[#58a6ff] dark:focus:ring-[#58a6ff]/20"
+                                                    className="w-full rounded-xl border border-neutral-200 bg-neutral-50 py-3 pl-10 pr-4 text-sm text-black outline-none transition-colors placeholder:text-neutral-400 focus:border-[#274060] focus:ring-2 focus:ring-[#274060]/20 disabled:opacity-60 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder:text-neutral-500 dark:focus:border-[#3F618C] dark:focus:ring-[#3F618C]/20"
                                                 />
                                             </div>
                                         </div>
@@ -253,7 +244,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                                                     onChange={(e) => setPhone(e.target.value)}
                                                     placeholder="+91 98765 43210"
                                                     disabled={isLoading || isGoogleLoading}
-                                                    className="w-full rounded-xl border border-neutral-200 bg-neutral-50 py-3 pl-10 pr-4 text-sm text-black outline-none transition-colors placeholder:text-neutral-400 focus:border-[#103651] focus:ring-2 focus:ring-[#103651]/20 disabled:opacity-60 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder:text-neutral-500 dark:focus:border-[#58a6ff] dark:focus:ring-[#58a6ff]/20"
+                                                    className="w-full rounded-xl border border-neutral-200 bg-neutral-50 py-3 pl-10 pr-4 text-sm text-black outline-none transition-colors placeholder:text-neutral-400 focus:border-[#274060] focus:ring-2 focus:ring-[#274060]/20 disabled:opacity-60 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder:text-neutral-500 dark:focus:border-[#3F618C] dark:focus:ring-[#3F618C]/20"
                                                 />
                                             </div>
                                         </div>
