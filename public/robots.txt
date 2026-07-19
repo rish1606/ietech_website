@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Admin CMS is a client-only, noindex route — keep it out of search results.
+Disallow: /admin
+
+Sitemap: https://ietech.ai/sitemap.xml

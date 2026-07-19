@@ -1278,122 +1278,6 @@ function CadReplicaPreview() {
   );
 }
 
-
-function IotReplicaPreview() {
-  const [weight, setWeight] = useState(254.3);
-  
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setWeight(prev => Number((prev + (Math.random() * 0.4 - 0.2)).toFixed(1)));
-    }, 1200);
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <div
-      className="relative mx-auto w-full max-w-[640px] overflow-hidden rounded-xl border border-[#d6dde8] bg-[#f6f7f9] shadow-[0_18px_34px_rgba(15,23,42,0.12)] dark:border-[#21262d] dark:bg-[#0d1117] dark:shadow-[0_18px_34px_rgba(0,0,0,0.4)]"
-      style={{ fontFamily: 'Inter, "Segoe UI", "Helvetica Neue", Arial, sans-serif' }}
-    >
-      <div className="aspect-[16/10] w-full overflow-hidden flex bg-[#0a0d12]">
-        
-        {/* Sidebar */}
-        <div className="flex w-9 shrink-0 flex-col items-center gap-1.5 border-r border-[#21262d] bg-[#161b22] px-1 py-2">
-          {[LayoutDashboard, Search, Settings].map((Icon, i) => (
-            <div key={i} className={`flex h-6 w-6 items-center justify-center rounded text-[10px] ${i === 0 ? 'bg-[#1f6feb] text-white' : 'text-[#8b949e]'}`}>
-              <Icon className="h-3 w-3" />
-            </div>
-          ))}
-        </div>
-
-        {/* Dashboard Main */}
-        <div className="flex-1 p-3">
-          <div className="flex items-center justify-between mb-3">
-            <div>
-              <p className="text-[10px] font-semibold text-[#3F618C]">Line 1 Control Center</p>
-              <p className="text-[8px] text-[#8b949e]">Hardware Telemetry & Vision</p>
-            </div>
-            <div className="flex items-center gap-1 rounded bg-emerald-500/10 px-2 py-0.5 text-[8px] text-emerald-400">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              Live Sync
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3 h-[calc(100%-40px)]">
-            
-            {/* Weight Scale Integration */}
-            <div className="flex flex-col gap-3">
-              <div className="rounded-lg border border-[#21262d] bg-[#161b22] p-3 flex-1 flex flex-col justify-center items-center relative overflow-hidden">
-                <p className="text-[9px] text-[#8b949e] absolute top-2 left-3">MODBUS / Scale 01</p>
-                <motion.div 
-                  key={weight}
-                  initial={{ opacity: 0.7, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="font-mono text-3xl font-bold text-white tracking-tight"
-                >
-                  {weight.toFixed(1)} <span className="text-sm text-[#8b949e]">kg</span>
-                </motion.div>
-                <div className="absolute bottom-2 right-3 text-[8px] text-emerald-400 flex items-center gap-1">
-                  <CheckCircle2 className="h-2 w-2" /> Tolerances Met
-                </div>
-              </div>
-
-              {/* PLC Parameter Logs */}
-              <div className="rounded-lg border border-[#21262d] bg-[#161b22] p-2 flex-1 flex flex-col">
-                <p className="text-[9px] text-[#8b949e] mb-2">CNC Tool Parameters (OPC UA)</p>
-                <div className="space-y-1">
-                  {['Spindle Speed', 'Feed Rate', 'Coolant Temp'].map((label, i) => (
-                    <div key={label} className="flex justify-between items-center bg-[#0d1117] px-2 py-1 rounded">
-                      <span className="text-[8px] text-neutral-400">{label}</span>
-                      <span className="text-[8px] font-mono text-white">{[12000, 450, 22.4][i]} {[ 'RPM', 'mm/m', '°C'][i]}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Vision Camera Feed */}
-            <div className="rounded-lg border border-[#21262d] bg-[#161b22] p-3 relative overflow-hidden flex flex-col">
-              <div className="flex justify-between items-center mb-2 z-10">
-                <p className="text-[9px] text-[#8b949e]">Quality Vision Camera</p>
-                <p className="text-[8px] font-mono text-[#3F618C]">CAM_02</p>
-              </div>
-              
-              {/* Fake Camera Feed Background */}
-              <div className="flex-1 bg-[#0d1117] rounded border border-[#21262d] relative overflow-hidden">
-                <svg className="absolute inset-0 h-full w-full opacity-30" aria-hidden>
-                  <defs>
-                    <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-                      <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#4a5568" strokeWidth="0.5" />
-                    </pattern>
-                  </defs>
-                  <rect width="100%" height="100%" fill="url(#grid)" />
-                </svg>
-
-                {/* Bounding Box Animation */}
-                <motion.div 
-                  animate={{ x: [20, 22, 20], y: [20, 18, 20] }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                  className="absolute left-6 top-6 w-16 h-16 border border-emerald-400 bg-emerald-400/10 flex items-end p-0.5"
-                >
-                  <span className="bg-emerald-400 text-black text-[6px] font-bold px-0.5">PASS 99%</span>
-                </motion.div>
-
-                {/* Scanning Laser */}
-                <motion.div
-                  animate={{ top: ['0%', '100%', '0%'] }}
-                  transition={{ duration: 4, ease: 'linear', repeat: Infinity }}
-                  className="absolute left-0 right-0 h-0.5 bg-emerald-400/50 shadow-[0_0_8px_rgba(52,211,153,0.8)]"
-                />
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function ServiceDescriptions() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 mt-24 lg:mt-32 border-t border-white/5 pt-16">
@@ -1490,7 +1374,7 @@ export default function Products({ onContactOpen }: { onContactOpen: () => void 
                   className="absolute left-0 top-[5%] w-[70%] md:w-[60%] h-[60%] rounded-xl overflow-hidden shadow-2xl border border-white/10 z-10"
                 >
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/90 via-transparent to-transparent z-10" />
-                    <img src="/industry-cad-demo.jpg" alt="Industrial Manufacturing" className="w-full h-full object-cover brightness-90" />
+                    <img loading="lazy" decoding="async" src="/industry-cad-demo.jpg" alt="Industrial Manufacturing" className="w-full h-full object-cover brightness-90" />
                     <div className="absolute bottom-4 left-4 z-20">
                         <p className="text-white font-medium text-xs sm:text-sm tracking-wide drop-shadow-lg whitespace-nowrap">Industrial Engineering</p>
                     </div>
@@ -1505,7 +1389,7 @@ export default function Products({ onContactOpen }: { onContactOpen: () => void 
                   className="absolute right-0 bottom-[5%] w-[70%] md:w-[60%] h-[60%] rounded-xl overflow-hidden shadow-2xl border border-white/10 z-20"
                 >
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/90 via-transparent to-transparent z-10" />
-                    <img src="/restaurant-erp-demo.jpg" alt="Restaurant Management" className="w-full h-full object-cover brightness-90" />
+                    <img loading="lazy" decoding="async" src="/restaurant-erp-demo.jpg" alt="Restaurant Management" className="w-full h-full object-cover brightness-90" />
                     <div className="absolute bottom-4 left-4 z-20">
                         <p className="text-white font-medium text-xs sm:text-sm tracking-wide drop-shadow-lg whitespace-nowrap">Hospitality & Retail</p>
                     </div>

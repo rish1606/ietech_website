@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!--
+    NOTE: This site uses client-side hash routing (#/blogs, #/project/...),
+    and search engines ignore URL fragments. Only the root document is a real,
+    crawlable URL, so it is the only entry here. To get blog and case-study
+    pages ranking individually, migrate to path-based routes with prerendering
+    (see the SEO notes handed over with this change) and add them below.
+  -->
+  <url>
+    <loc>https://ietech.ai/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>
