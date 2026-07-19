@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { ArrowUpRight, Loader2 } from 'lucide-react';
 import { db } from '../lib/firebase';
-import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
+import { collection, getDocs, query, limit } from 'firebase/firestore';
 
 interface BlogPost {
   id: string;
@@ -18,6 +19,7 @@ interface BlogPost {
 export default function BlogSection() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchBlogs() {
@@ -66,8 +68,8 @@ export default function BlogSection() {
               
               <div className="relative inline-block group cursor-pointer">
                 <div className="absolute -inset-4 bg-gradient-to-r from-[#3F618C]/20 to-[#3F618C]/0 rounded-full blur-xl group-hover:from-[#3F618C]/40 transition-all duration-500" />
-                <button 
-                  onClick={() => window.location.hash = '#/blog'}
+                <button
+                  onClick={() => navigate('/blogs')}
                   className="relative text-sm font-bold tracking-widest uppercase flex items-center gap-2"
                 >
                   View All Blogs
@@ -85,13 +87,14 @@ export default function BlogSection() {
             ) : posts.length === 0 ? (
               <div className="text-center py-20 border border-white/10 bg-black/50 rounded-2xl">
                 <h3 className="text-xl text-white font-bold mb-2">No Blogs Found</h3>
-                <p className="text-neutral-500 text-sm">Please log in to the CMS (#/admin) to publish your first blog.</p>
+                <p className="text-neutral-500 text-sm">Please log in to the CMS (/admin) to publish your first blog.</p>
               </div>
             ) : (
               posts.map((post, index) => (
                 <motion.a
                   key={post.id}
-                  href={`#/blog/${post.id}`}
+                  href={`/blog/${post.id}`}
+                  onClick={(e) => { e.preventDefault(); navigate(`/blog/${post.id}`); }}
                   initial={{ opacity: 0, x: 20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: false }}

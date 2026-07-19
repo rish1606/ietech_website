@@ -497,13 +497,13 @@ const disciplines = [
         description: (
             <>
                 Full-stack product development, cloud infrastructure, AI integration, and industrial automation software — built and shipped inside demanding engineering organisations, including SDE2 engineer at{' '}
-                <img
+                <img loading="lazy" decoding="async"
                     src="/logos/google.svg"
                     alt="Google"
                     className="inline-block h-[14px] mx-[2px] mb-[2px]"
                 />{' '}
                 and open-source work at{' '}
-                <img
+                <img loading="lazy" decoding="async"
                     src="/logos/mozilla-lockup.svg"
                     alt="Mozilla"
                     className="inline-block h-[14px] mx-[2px] mb-[2px] dark:invert opacity-80 dark:opacity-100"
@@ -521,12 +521,12 @@ const disciplines = [
         description: (
             <>
                 Deep expertise in manufacturing processes, precision parts, and mechanical system design. Hands-on across Rajkot&apos;s leading manufacturers and tier-1 suppliers — including design programmes at{' '}
-                <img
+                <img loading="lazy" decoding="async"
                     src="/logos/tata-ev-positive-tight.png"
                     alt="Tata Electric Mobility"
                     className="inline-block h-[14px] mx-[2px] mb-[3px] dark:hidden"
                 />
-                <img
+                <img loading="lazy" decoding="async"
                     src="/logos/tata-ev-negative-tight.png"
                     alt="Tata Electric Mobility"
                     className="hidden dark:inline-block h-[14px] mx-[2px] mb-[3px]"
@@ -543,7 +543,7 @@ const credStats = [
     {
         id: 'Google',
         value: (
-            <img
+            <img loading="lazy" decoding="async"
                 src="/logos/google.svg"
                 alt="Google"
                 className="h-[26px] w-auto object-contain"
@@ -555,7 +555,7 @@ const credStats = [
     {
         id: 'Mozilla',
         value: (
-            <img
+            <img loading="lazy" decoding="async"
                 src="/logos/mozilla-lockup.svg"
                 alt="Mozilla"
                 className="h-[22px] w-auto object-contain dark:invert opacity-80 dark:opacity-100"
@@ -568,12 +568,12 @@ const credStats = [
         id: 'TataElectricMobility',
         value: (
             <span className="flex items-center">
-                <img
+                <img loading="lazy" decoding="async"
                     src="/logos/tata-ev-positive-tight.png"
                     alt="Tata Electric Mobility"
                     className="h-[34px] w-auto object-contain dark:hidden"
                 />
-                <img
+                <img loading="lazy" decoding="async"
                     src="/logos/tata-ev-negative-tight.png"
                     alt="Tata Electric Mobility"
                     className="hidden h-[34px] w-auto object-contain dark:block"
@@ -586,7 +586,7 @@ const credStats = [
     {
         id: 'RajkotMfg',
         value: (
-            <img
+            <img loading="lazy" decoding="async"
                 src="/logos/mtma-rajkot.jpg"
                 alt="Rajkot MFG"
                 className="h-[22px] w-auto object-contain"
@@ -598,7 +598,7 @@ const credStats = [
     {
         id: 'I4.0',
         value: (
-            <img
+            <img loading="lazy" decoding="async"
                 src="/logos/industry-4-0-badge.svg"
                 alt="Industry 4.0"
                 className="h-[28px] w-auto object-contain"

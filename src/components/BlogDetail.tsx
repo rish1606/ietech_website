@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, Clock, Loader2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import Seo, { SITE_URL } from './Seo';
 import { db } from '../lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 
@@ -58,6 +59,7 @@ export default function BlogDetail({ slug, onBack }: BlogDetailProps) {
   if (!post) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center text-white">
+        <Seo title="Post Not Found" path={`/blog/${slug}`} noindex />
         <div className="text-center">
           <h1 className="text-4xl font-bold mb-4">Post not found</h1>
           <button onClick={onBack} className="text-blue-400 hover:underline">Return to Home</button>
@@ -70,8 +72,40 @@ export default function BlogDetail({ slug, onBack }: BlogDetailProps) {
   const wordCount = post.content.split(/\s+/).length;
   const readTime = Math.max(1, Math.ceil(wordCount / 200));
 
+  const imageAbs = post.image
+    ? (post.image.startsWith('http') ? post.image : `${SITE_URL}${post.image}`)
+    : `${SITE_URL}/logo.svg`;
+  const description = (post.content || '')
+    .replace(/[#*_>`[\]]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 155) || `${post.title} — insights from i.e tech.`;
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    image: imageAbs,
+    datePublished: post.date,
+    articleSection: post.category,
+    author: { '@type': post.authorName ? 'Person' : 'Organization', name: post.authorName || 'i.e tech' },
+    publisher: {
+      '@type': 'Organization',
+      name: 'i.e tech',
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.svg` },
+    },
+    mainEntityOfPage: `${SITE_URL}/blog/${post.id}`,
+  };
+
   return (
     <article className="min-h-screen bg-black text-white pb-24 font-sans">
+      <Seo
+        title={post.title}
+        path={`/blog/${post.id}`}
+        description={description}
+        image={imageAbs}
+        type="article"
+        jsonLd={jsonLd}
+      />
       {/* Navbar spacer */}
       <div className="h-24 md:h-32" />
 
@@ -94,7 +128,7 @@ export default function BlogDetail({ slug, onBack }: BlogDetailProps) {
           {post.image && (
             <div className="w-full aspect-[2/1] md:aspect-[21/9] rounded-2xl md:rounded-[2rem] overflow-hidden mb-12 relative border border-neutral-800">
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent z-10" />
-              <img 
+              <img loading="lazy" decoding="async" 
                 src={post.image} 
                 alt={post.title} 
                 className="w-full h-full object-cover"

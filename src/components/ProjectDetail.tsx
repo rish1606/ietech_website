@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, Loader2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import Seo, { SITE_URL } from './Seo';
 import { db } from '../lib/firebase';
 import { doc, getDoc, collection, getDocs, query, limit, where } from 'firebase/firestore';
 
@@ -67,6 +69,7 @@ export default function ProjectDetail({ projectId, onBack }: { projectId: string
   if (!project) {
     return (
       <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-8 font-sans">
+        <Seo title="Case Study Not Found" path={`/project/${projectId}`} noindex />
         <h2 className="text-2xl font-bold mb-4 tracking-tighter">Project Not Found</h2>
         <button
           onClick={onBack}
@@ -78,9 +81,40 @@ export default function ProjectDetail({ projectId, onBack }: { projectId: string
     );
   }
 
+  const imageAbs = project.image
+    ? (project.image.startsWith('http') ? project.image : `${SITE_URL}${project.image}`)
+    : `${SITE_URL}/logo.svg`;
+  const description = (project.content || '')
+    .replace(/[#*_>`[\]]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 155) || `${project.title} — a case study by i.e tech.`;
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: project.title,
+    image: imageAbs,
+    datePublished: project.date,
+    author: { '@type': 'Person', name: project.authorName },
+    publisher: {
+      '@type': 'Organization',
+      name: 'i.e tech',
+      logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.svg` },
+    },
+    about: project.industry,
+  };
+
   return (
     <div className="min-h-screen bg-black text-white font-sans transition-colors duration-300">
-      
+      <Seo
+        title={project.title}
+        path={`/project/${project.id}`}
+        description={description}
+        image={imageAbs}
+        type="article"
+        jsonLd={jsonLd}
+      />
+
       {/* Top sticky header bar */}
       <div className="sticky top-0 z-40 bg-black/95 backdrop-blur-md border-b border-neutral-800/80 py-4 px-4 md:px-8">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -115,7 +149,7 @@ export default function ProjectDetail({ projectId, onBack }: { projectId: string
           {/* Hero Image */}
           {project.image && (
             <div className="w-full aspect-[16/9] md:aspect-[21/9] bg-neutral-900 border border-neutral-800 mb-16 overflow-hidden relative">
-              <img 
+              <img loading="lazy" decoding="async" 
                 src={project.image} 
                 alt={project.client}
                 className="w-full h-full object-cover"
@@ -179,20 +213,20 @@ export default function ProjectDetail({ projectId, onBack }: { projectId: string
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
             {otherProjects.map(p => (
-              <a 
-                key={p.id} 
-                href={`#/project/${p.id}`}
+              <Link
+                key={p.id}
+                to={`/project/${p.id}`}
                 className="group block border border-neutral-800 bg-black overflow-hidden"
               >
                 <div className="aspect-[4/3] overflow-hidden bg-neutral-900 relative">
-                  <img src={p.image} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={p.title} />
+                  <img loading="lazy" decoding="async" src={p.image} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={p.title} />
                   <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500" />
                 </div>
                 <div className="p-6">
                   <span className="text-[10px] text-[#3F618C] uppercase tracking-widest font-bold mb-3 block">Case Study</span>
                   <h3 className="text-lg font-bold text-white leading-snug group-hover:text-[#3F618C] transition-colors">{p.title}</h3>
                 </div>
-              </a>
+              </Link>
             ))}
           </div>
 

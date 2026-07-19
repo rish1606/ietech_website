@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { db, auth } from '../lib/firebase';
+import { db } from '../lib/firebase';
 import { doc as firestoreDoc, setDoc as firestoreSetDoc, getDoc as firestoreGetDoc } from 'firebase/firestore';
 import { useAuth } from '../context/AuthContext';
 import { Loader2, ArrowLeft, Save, Bold, Heading2, Heading3, Link as LinkIcon, List } from 'lucide-react';

@@ -13,4 +13,19 @@ export default defineConfig({
   server: {
     allowedHosts: ['.trycloudflare.com', '.loca.lt'],
   },
+  build: {
+    // Split heavy, independently-cacheable vendors out of the main chunk so
+    // the initial document parses less JS and repeat visits reuse cached vendor
+    // files across deploys.
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          firebase: ['firebase/app', 'firebase/auth', 'firebase/firestore'],
+          motion: ['framer-motion', 'motion'],
+          markdown: ['react-markdown', 'remark-gfm'],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 900,
+  },
 })

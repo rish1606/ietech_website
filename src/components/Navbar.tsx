@@ -1,13 +1,16 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Mail, Phone, MessageCircle, ChevronDown } from 'lucide-react';
 import Logo from './Logo';
 
-const navItems = [
-  { href: '#about', label: 'ABOUT' },
-  { href: '#services', label: 'SERVICE' },
-  { href: '#/blogs', label: 'BLOGS' },
-  { href: '#/projects', label: 'CUSTOMERS' },
+type NavItem = { label: string; to?: string; hash?: string };
+
+const navItems: NavItem[] = [
+  { label: 'ABOUT', hash: 'about' },
+  { label: 'SERVICE', hash: 'services' },
+  { label: 'BLOGS', to: '/blogs' },
+  { label: 'CUSTOMERS', to: '/projects' },
 ];
 
 const contacts = [
@@ -32,6 +35,23 @@ const contacts = [
 export default function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleNav = (e: React.MouseEvent, item: NavItem) => {
+    e.preventDefault();
+    if (item.hash) {
+      // Homepage section anchor: scroll if already home, otherwise route home + hash.
+      if (location.pathname === '/') {
+        document.getElementById(item.hash)?.scrollIntoView({ behavior: 'smooth' });
+        window.history.pushState(null, '', `/#${item.hash}`);
+      } else {
+        navigate(`/#${item.hash}`);
+      }
+    } else if (item.to) {
+      navigate(item.to);
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -53,7 +73,8 @@ export default function Navbar() {
       className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 md:px-12 bg-black border-b border-white/10 shadow-lg transition-colors duration-300"
     >
       <motion.a
-        href="#/"
+        href="/"
+        onClick={(e) => { e.preventDefault(); navigate('/'); }}
         initial={{ opacity: 0, x: -10 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
@@ -65,21 +86,9 @@ export default function Navbar() {
       <div className="hidden md:flex items-center gap-6 xl:gap-8 absolute left-1/2 -translate-x-1/2">
         {navItems.map((item) => (
           <a
-            key={item.href}
-            href={item.href}
-            onClick={(e) => {
-              if (item.href.startsWith('#/')) {
-                return; // Let native routing handle page changes
-              }
-              const targetId = item.href.replace('#', '');
-              const element = document.getElementById(targetId);
-              if (element) {
-                e.preventDefault();
-                element.scrollIntoView({ behavior: 'smooth' });
-                // Update URL without triggering the hashchange jump
-                window.history.pushState(null, '', item.href);
-              }
-            }}
+            key={item.label}
+            href={item.to ?? `/#${item.hash}`}
+            onClick={(e) => handleNav(e, item)}
             className="inline-flex items-center text-[11px] xl:text-xs font-bold tracking-[0.15em] text-white/70 hover:text-white transition-colors duration-200"
           >
             {item.label}

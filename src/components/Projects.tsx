@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { ArrowUpRight, Loader2 } from 'lucide-react';
 import { db } from '../lib/firebase';
-import { collection, getDocs, orderBy, query } from 'firebase/firestore';
+import { collection, getDocs, query } from 'firebase/firestore';
 
 interface Project {
   id: string;
@@ -89,7 +90,7 @@ export default function Projects() {
         {!isLoading && projectsData.length === 0 && (
           <div className="text-center py-20 border border-white/10 bg-black">
             <h3 className="text-xl text-white font-bold mb-2">No Case Studies Found</h3>
-            <p className="text-neutral-500 text-sm">Please log in to the CMS (#/admin) to publish your first case study.</p>
+            <p className="text-neutral-500 text-sm">Please log in to the CMS (/admin) to publish your first case study.</p>
           </div>
         )}
 
@@ -104,7 +105,7 @@ export default function Projects() {
                 >
                   {/* Visual Graphic Representation */}
                   <div className="w-full aspect-[4/3] bg-[#0a0a0a] border-b border-white/10 overflow-hidden relative">
-                    <img 
+                    <img loading="lazy" decoding="async" 
                       src={project.image} 
                       alt={`${project.client} Facility`}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
@@ -128,13 +129,13 @@ export default function Projects() {
 
                     {/* Explore More */}
                     <div className="mt-auto pt-4 border-t border-white/5">
-                      <a
-                        href={`#/project/${project.id}`}
+                      <Link
+                        to={`/project/${project.id}`}
                         className="inline-flex items-center gap-1.5 text-xs font-bold text-white hover:text-[#3F618C] transition-colors group/btn"
                       >
                         <span>Explore more</span>
                         <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
-                      </a>
+                      </Link>
                     </div>
                   </div>
 

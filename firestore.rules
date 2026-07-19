@@ -1,0 +1,62 @@
+rules_version = '2';
+
+// Firestore security rules for the ietech.ai website.
+//
+// SECURITY MODEL
+// --------------
+// The React app enforces an admin allow-list in the UI (ALLOWED_ADMIN_EMAILS),
+// but UI checks are cosmetic: anyone can call the Firestore REST/SDK API directly
+// with the public web config. These rules are the ONLY real access control, so
+// every collection is locked down here as well.
+//
+// Keep the admin list below in sync with ALLOWED_ADMIN_EMAILS in
+// src/components/AdminCMS.tsx and src/components/AdminDashboard.tsx.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Is the caller a signed-in, verified admin?
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email in [
+          '138aditya@gmail.com'
+        ];
+    }
+
+    // Public content: anyone may read; only an admin may create/update/delete.
+    match /blogs/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /case_studies/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Contact form: the public may CREATE a lead, but nobody may read, update,
+    // or delete leads from the client. Reads happen server-side / in the console.
+    // The shape check stops the collection from being abused as free storage.
+    match /contact_submissions/{docId} {
+      allow read, update, delete: if false;
+      allow create: if isValidLead();
+    }
+
+    function isValidLead() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['email', 'phone', 'createdAt'])
+        && d.email is string
+        && d.email.size() > 3
+        && d.email.size() < 254
+        && d.email.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')
+        && (!('phone' in d) || (d.phone is string && d.phone.size() < 32))
+        && d.createdAt is string;
+    }
+
+    // Deny everything not explicitly matched above.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
