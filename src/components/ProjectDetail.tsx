@@ -69,6 +69,7 @@ export default function ProjectDetail({ projectId, onBack }: { projectId: string
   if (!project) {
     return (
       <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-8 font-sans">
+        <Seo title="Case Study Not Found" path={`/project/${projectId}`} noindex />
         <h2 className="text-2xl font-bold mb-4 tracking-tighter">Project Not Found</h2>
         <button
           onClick={onBack}

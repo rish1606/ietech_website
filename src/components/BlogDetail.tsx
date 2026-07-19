@@ -59,6 +59,7 @@ export default function BlogDetail({ slug, onBack }: BlogDetailProps) {
   if (!post) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center text-white">
+        <Seo title="Post Not Found" path={`/blog/${slug}`} noindex />
         <div className="text-center">
           <h1 className="text-4xl font-bold mb-4">Post not found</h1>
           <button onClick={onBack} className="text-blue-400 hover:underline">Return to Home</button>

@@ -167,6 +167,12 @@ async function main() {
 
   // Capture the pristine shell BEFORE any route (including "/") overwrites index.html.
   const template = readFileSync(join(DIST, 'index.html'), 'utf8');
+  // Persist the pristine shell for nginx to serve as the client-side fallback for
+  // not-yet-prerendered /blog/* and /project/* slugs (new CMS posts before a rebuild).
+  // It must NOT be the homepage snapshot, or homepage content/meta would leak onto
+  // those URLs; this pristine template has an empty #root and no per-page meta, so
+  // the client renders the correct post + tags.
+  await writeFile(join(DIST, '_shell.html'), template, 'utf8');
   const server = await startServer(template);
 
   // Launch the browser. If Chromium is unavailable (e.g. a constrained CI/Docker
